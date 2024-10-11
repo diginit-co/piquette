@@ -1,6 +1,5 @@
 "use client"
 import { useState } from "react";
-import { env } from "~/env";
 import OpenAI from "openai";
 import { nanoid } from "nanoid";
 
@@ -50,7 +49,7 @@ export default function ChatComponent() {
       });
 
       // Extract the AI response
-      const aiMessage = response?.choices?.[0]?.message?.content || "No response";
+      const aiMessage = response?.choices?.[0]?.message?.content ?? "No response";
 
       // Add AI response to the chat
       setMessages((prevMessages) => [
