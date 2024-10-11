@@ -9,6 +9,7 @@ type TextAreaProps = {
   rows?: number;
   cols?: number;
   className?: string;
+  disabled?: boolean;
 };
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
