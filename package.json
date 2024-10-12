@@ -14,6 +14,9 @@
     "start": "next start"
   },
   "dependencies": {
+    "@builder.io/dev-tools": "^1.1.20",
+    "@builder.io/react": "^5.0.4",
+    "@builder.io/sdk": "^3.0.2",
     "@clerk/nextjs": "^5.6.4",
     "@headlessui/react": "^2.1.8",
     "@heroicons/react": "^2.1.5",
