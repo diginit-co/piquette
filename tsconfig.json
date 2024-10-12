@@ -23,6 +23,8 @@
     "plugins": [{ "name": "next" }],
     "incremental": true,
 
+    "allowSyntheticDefaultImports": true,
+
     /* Path Aliases */
     "baseUrl": ".",
     "paths": {

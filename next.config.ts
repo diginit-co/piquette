@@ -1,4 +1,4 @@
-import BuilderDevTools from "@builder.io/dev-tools/next";
+
 
 /**
  * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful
@@ -7,12 +7,12 @@ import BuilderDevTools from "@builder.io/dev-tools/next";
 await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
-const config = BuilderDevTools()({
+const config = {
   reactStrictMode: true,
   images: {
     unoptimized: true,
     domains: ["img.clerk.com"],
   },
-});
-
+};
+  
 export default config;
