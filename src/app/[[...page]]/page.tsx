@@ -57,12 +57,15 @@ export default async function Page(props: PageProps) {
     })
     .promise() as BuilderContent | null; // Explicitly cast the result to BuilderContent
 
-  // Check if content exists and has data, safely
-  if (content && content.data) {
-    const { title, description } = content.data;
+  // Using optional chaining to safely access title and description
+  const title = content?.data?.title;
+  const description = content?.data?.description;
 
-    // Here you can handle the content data if needed
+  if (title) {
     console.log("Page Title:", title);
+  }
+
+  if (description) {
     console.log("Page Description:", description);
   }
 
