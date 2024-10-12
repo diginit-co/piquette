@@ -32,6 +32,8 @@ builder.init(process.env.NEXT_PUBLIC_BUILDER_API_KEY!);
 // Define the expected content structure
 interface BuilderContent {
   // Define properties according to your content structure
+  data?: any; // Replace 'any' with the actual structure of your content
+  [key: string]: any; // Allows additional properties, if necessary
 }
 
 interface PageProps {
@@ -43,17 +45,19 @@ interface PageProps {
 export default async function Page(props: PageProps) {
   const builderModelName = "page";
 
+  // Safely handle the promise and ensure the content is of type `BuilderContent | null`
   const content: BuilderContent | null = await builder
     .get(builderModelName, {
       userAttributes: {
-        urlPath: "/" + (props?.params?.page?.join("/") || ""),
+        urlPath: "/" + (props?.params?.page?.join("/") ?? ""),
       },
     })
-    .toPromise();
+    .promise() // `.toPromise()` has been updated to `.promise()` in newer versions of Builder SDK.
 
   return (
     <div>
-      <RenderBuilderContent content={content || undefined} model={builderModelName} />
+      {/* Render the content, or provide a fallback for undefined */}
+      <RenderBuilderContent content={content ?? undefined} model={builderModelName} />
     </div>
   );
 }
