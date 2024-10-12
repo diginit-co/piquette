@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "install": "node-pre-gyp install --fallback-to-build=false",
     "build": "next build",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
