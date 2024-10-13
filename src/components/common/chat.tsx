@@ -72,10 +72,12 @@ export default function ChatComponent() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <button className="fixed bottom-4 right-4 bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600">
+        <button className="-m-2.5 p-2.5 text-blue-400 hover:text-blue-500">
+          <span className="sr-only">View AI Chat</span>
           <ChatIcon className="h-6 w-6" />
         </button>
       </SheetTrigger>
+      
       <SheetContent>
         <SheetHeader className="flex flex-col h-full">
           <SheetTitle>Chat with AI</SheetTitle>

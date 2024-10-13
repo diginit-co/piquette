@@ -18,6 +18,7 @@ import {
 import {
   Bars3Icon,
   BellIcon,
+  QrCodeIcon,
   Cog6ToothIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
@@ -215,7 +216,7 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
             <div aria-hidden="true" className="h-6 w-px bg-gray-900/10 lg:hidden" />
 
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-              <form action="#" method="GET" className="relative flex flex-1">
+              {/* <form action="#" method="GET" className="relative flex flex-1">
                 <label htmlFor="search-field" className="sr-only">
                   Search
                 </label>
@@ -230,8 +231,22 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
                   placeholder="Search..."
                   className="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
                 />
-              </form>
-              <div className="flex items-center gap-x-4 lg:gap-x-6">
+              </form> */}
+              <div className="relative flex flex-1"/> {/** Temporary Spacer */}
+              <div className="flex items-center gap-x-4 lg:gap-x-4">
+
+                <ChatComponent />
+
+                <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
+                  <span className="sr-only">View profile card</span>
+                  <QrCodeIcon aria-hidden="true" className="h-6 w-6" />
+                </button>
+
+                <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
+                  <span className="sr-only">View search</span>
+                  <MagnifyingGlassIcon aria-hidden="true" className="h-6 w-6" />
+                </button>
+
                 <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
                   <span className="sr-only">View notifications</span>
                   <BellIcon aria-hidden="true" className="h-6 w-6" />
@@ -281,7 +296,6 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
           </div>
           <main className="py-10 bg-gray-50 min-h-screen">
             <div className="px-4 sm:px-6 lg:px-8 container">{children}</div>
-            <ChatComponent />
           </main>
         </div>
       </div>
