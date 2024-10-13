@@ -8,7 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
 
-import { AccountDropdownComponent, ChatComponent } from "~/components/common";
+import { AccountDropdownComponent, ChatComponent, ProfileComponent, NotificationsComponent } from "~/components/common";
 import {
   Dialog,
   DialogBackdrop,
@@ -18,7 +18,6 @@ import {
 import {
   Bars3Icon,
   BellIcon,
-  QrCodeIcon,
   Cog6ToothIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
@@ -237,20 +236,14 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
 
                 <ChatComponent />
 
-                <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
-                  <span className="sr-only">View profile card</span>
-                  <QrCodeIcon aria-hidden="true" className="h-6 w-6" />
-                </button>
+                <ProfileComponent />
 
                 <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
                   <span className="sr-only">View search</span>
                   <MagnifyingGlassIcon aria-hidden="true" className="h-6 w-6" />
                 </button>
 
-                <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon aria-hidden="true" className="h-6 w-6" />
-                </button>
+                <NotificationsComponent />
 
                 {/* Separator */}
                 <div aria-hidden="true" className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" />

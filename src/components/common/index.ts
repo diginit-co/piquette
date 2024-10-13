@@ -7,6 +7,8 @@ import FooterComponent from './footer'
 import FormComponent from './Form/form'
 import HeaderComponent from './header'
 import NavbarComponent from './navbar'
+import NotificationsComponent from './notifications'
+import ProfileComponent from './profile'
 
 export {
     AccountDropdownComponent,
@@ -17,5 +19,7 @@ export {
     FooterComponent,
     FormComponent,
     HeaderComponent,
-    NavbarComponent
+    NavbarComponent,
+    NotificationsComponent,
+    ProfileComponent
 } 
