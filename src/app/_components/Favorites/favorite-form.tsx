@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { toast } from "~/hooks/use-toast"
 
 import { FormComponent } from "~/components/common";
+import { type FormDefinition } from '~/components/common/Form/form.dt';
 
 import { api } from "~/trpc/react";
 
@@ -13,10 +13,8 @@ interface FavoriteFormProps {
 }
 export function FavoriteForm({ userId, setDialogOpen }: FavoriteFormProps) {
   const utils = api.useUtils();
-  const [object, setObject] = useState("");
-  const [type, setType] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [error, setError] = useState("");
   
   
 
@@ -34,17 +32,33 @@ export function FavoriteForm({ userId, setDialogOpen }: FavoriteFormProps) {
     },
   });
 
-  const handleFormSubmit = async (data: { object: string; type: string }) => {
+  const handleFormSubmit = (data: Record<string, unknown>) => {
     void createFavorite.mutateAsync({
       ...data,
-      createdBy: userId,
-      updatedBy: userId,
+      object: "",
+      type: "",
+      createdBy: "",
+      updatedBy: ""
     });
-    setObject("");
-    setType("");
   };
 
+  const formConfig: FormDefinition = {
+    headline: "Favorite Form",
+    description: "This is an example of how to manually create a form",
+    fields: [
+      [
+        {label: "Type", type: "text", name: "type", required: true},
+      ],
+      [
+        {label: "Object", type: "text", name: "object", required: true},
+      ]
+    ],
+    buttons: [
+      {label: "Cancel", type: "reset", variant: "ghost"},
+      {label: "Submit", type: "submit", variant: "default"}
+    ],
+  }
   return (
-    <FormComponent object={object} type={type} onSubmit={handleFormSubmit} />
+    <FormComponent formConfig={formConfig} onSubmit={handleFormSubmit} />
   );
 }
