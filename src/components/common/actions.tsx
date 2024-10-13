@@ -87,13 +87,13 @@ import {
 } from "~/components/ui/dialog";
 
 // Helper functions
-const handleShare = (currentId: number, currentKey: string, currentType: string, currentObject: string, currentLabel: string) => {
-    alert('Share');
-};
+// const handleShare = () => {
+//     alert('Share');
+// };
 
-const handleEdit = (currentObject: string) => {
-    console.log(`Edit ${currentObject}`); // Placeholder for edit logic
-}
+// const handleEdit = (currentObject: string) => {
+//     console.log(`Edit ${currentObject}`); // Placeholder for edit logic
+// }
 
 
 // Component props interface
@@ -318,7 +318,7 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
             } else if (action === 'save') {
                 void handleAddSave(data.type, data.object); // Explicitly ignore promise
             } else if (action === 'share') {
-                handleShare(data.id, data.key, data.type, data.object, data.label);
+                console.log('Share');
             }
         }
     };
