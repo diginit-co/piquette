@@ -36,6 +36,7 @@ import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group'
 import { Checkbox } from "~/components/ui/checkbox"
 import { type FormDefinition } from './form.dt'
 
+type FormValue = string | string[] | undefined;
 
 interface FormComponentProps {
   object?: string
@@ -151,34 +152,34 @@ export default function FormComponent( {onSubmit, formConfig }: FormComponentPro
                                 )}
                               </form.Field>
                             )
-                          case "checkbox":
-                            return (
-                              <form.Field name={col.name}>
-                                {(field) => (
-                                  <ul className="space-y-2">
-                                    {col.options?.map((option, idx) => (
-                                      <li key={idx} className="flex items-center space-x-2">
-                                        <Checkbox
-                                          id={`${idx}`}
-                                          // checked={Array.isArray(field.state.value)} // Check if the option is in the array
-                                          onCheckedChange={(checked) => {
-                                            field.handleChange((prevValue) => {
-                                              const currentValue = Array.isArray(prevValue) ? prevValue : []; // Ensure currentValue is always an array
-                                              if (checked) {
-                                                return [...currentValue, option];
-                                              } else {
-                                                return currentValue.filter((value) => value !== option);
-                                              }
-                                            });
-                                          }}
-                                        />
-                                        <Label htmlFor={`${idx}`} className="ml-2">{option}</Label>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                )}
-                              </form.Field>
-                            )
+                          // case "checkbox":
+                          //   return (
+                          //   <form.Field name={col.name}>
+                          //     {(field) => (
+                          //       <ul className="space-y-2">
+                          //         {col.options?.map((option, idx) => (
+                          //           <li key={idx} className="flex items-center space-x-2">
+                          //             <Checkbox
+                          //               id={`${idx}`}
+                          //               checked={Array.isArray(field.state.value) ? field.state.value.includes(option) : false} // Ensure the correct checking behavior
+                          //               onCheckedChange={(checked) => {
+                          //                 field.handleChange((prevValue: FormValue) => {
+                          //                   const currentValue = Array.isArray(prevValue) ? prevValue : [];
+                          //                   if (checked) {
+                          //                     return [...currentValue, option]; // Add the option if checked
+                          //                   } else {
+                          //                     return currentValue.filter((value) => value !== option); // Remove the option if unchecked
+                          //                   }
+                          //                 });
+                          //               }}
+                          //             />
+                          //             <Label htmlFor={`${idx}`} className="ml-2">{option}</Label>
+                          //           </li>
+                          //         ))}
+                          //       </ul>
+                          //     )}
+                          //   </form.Field>
+                          //   )
                           default:
                             return <>Unknown</>;
                         }
