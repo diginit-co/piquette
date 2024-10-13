@@ -98,8 +98,6 @@ import {
   TooltipProvider,
 } from "~/components/ui/tooltip"
 
-export const description =
-  "An products dashboard with a sidebar navigation. The sidebar has icon navigation. The content area has a breadcrumb and search in the header. It displays a list of products in a table with actions."
 
 export default function ExamplePage() {
   return (
@@ -299,13 +297,13 @@ export default function ExamplePage() {
                     <TableBody>
                       <TableRow>
                         <TableCell className="hidden sm:table-cell">
-                          <Image
+                          {/* <Image
                             alt="Product image"
                             className="aspect-square rounded-md object-cover"
                             height="64"
                             src="/placeholder.svg"
                             width="64"
-                          />
+                          /> */}
                         </TableCell>
                         <TableCell className="font-medium">
                           Laser Lemonade Machine
@@ -344,13 +342,13 @@ export default function ExamplePage() {
                       </TableRow>
                       <TableRow>
                         <TableCell className="hidden sm:table-cell">
-                          <Image
+                          {/* <Image
                             alt="Product image"
                             className="aspect-square rounded-md object-cover"
                             height="64"
                             src="/placeholder.svg"
                             width="64"
-                          />
+                          /> */}
                         </TableCell>
                         <TableCell className="font-medium">
                           Hypernova Headphones
@@ -389,13 +387,13 @@ export default function ExamplePage() {
                       </TableRow>
                       <TableRow>
                         <TableCell className="hidden sm:table-cell">
-                          <Image
+                          {/* <Image
                             alt="Product image"
                             className="aspect-square rounded-md object-cover"
                             height="64"
                             src="/placeholder.svg"
                             width="64"
-                          />
+                          /> */}
                         </TableCell>
                         <TableCell className="font-medium">
                           AeroGlow Desk Lamp
@@ -434,13 +432,13 @@ export default function ExamplePage() {
                       </TableRow>
                       <TableRow>
                         <TableCell className="hidden sm:table-cell">
-                          <Image
+                          {/* <Image
                             alt="Product image"
                             className="aspect-square rounded-md object-cover"
                             height="64"
                             src="/placeholder.svg"
                             width="64"
-                          />
+                          /> */}
                         </TableCell>
                         <TableCell className="font-medium">
                           TechTonic Energy Drink
@@ -479,13 +477,13 @@ export default function ExamplePage() {
                       </TableRow>
                       <TableRow>
                         <TableCell className="hidden sm:table-cell">
-                          <Image
+                          {/* <Image
                             alt="Product image"
                             className="aspect-square rounded-md object-cover"
                             height="64"
                             src="/placeholder.svg"
                             width="64"
-                          />
+                          /> */}
                         </TableCell>
                         <TableCell className="font-medium">
                           Gamer Gear Pro Controller
@@ -524,13 +522,13 @@ export default function ExamplePage() {
                       </TableRow>
                       <TableRow>
                         <TableCell className="hidden sm:table-cell">
-                          <Image
+                          {/* <Image
                             alt="Product image"
                             className="aspect-square rounded-md object-cover"
                             height="64"
                             src="/placeholder.svg"
                             width="64"
-                          />
+                          /> */}
                         </TableCell>
                         <TableCell className="font-medium">
                           Luminous VR Headset
