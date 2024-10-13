@@ -34,11 +34,10 @@ export function FavoriteForm({ userId, setDialogOpen }: FavoriteFormProps) {
 
   const handleFormSubmit = (data: Record<string, unknown>) => {
     void createFavorite.mutateAsync({
-      ...data,
-      object: "",
-      type: "",
-      createdBy: "",
-      updatedBy: ""
+      type: data.type as string,
+      object: data.object as string,
+      createdBy: "Brooke", 
+      updatedBy: "Brooke",
     });
   };
 
