@@ -2,8 +2,7 @@
 
 import { toast } from "~/hooks/use-toast"
 
-import { FormComponent } from "~/components/common";
-import { type FormDefinition } from '~/components/common/Form/form.dt';
+import { FormComponent, type FormDefinition } from "~/components/common";
 
 import { api } from "~/trpc/react";
 

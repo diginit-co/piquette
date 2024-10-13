@@ -1,4 +1,4 @@
-export interface FormDefinition {
+export default interface FormDefinition {
     headline: string
     description: string
     fields: Field[][]
