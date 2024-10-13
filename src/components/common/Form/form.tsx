@@ -34,14 +34,14 @@ import {
  } from '~/components/ui/select'
 import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group'
 import { Checkbox } from "~/components/ui/checkbox"
-import type FormDefinition from './form.dt'
+import type {FormDefinition} from '~/components/common'
 
 type FormValue = string | string[] | undefined;
 
 interface FormComponentProps {
   object?: string
   type?: string
-  formConfig: FormDefinition
+  formConfig: FormDefinition;
   onSubmit: (data: Record<string, unknown>) => void;
 }
 

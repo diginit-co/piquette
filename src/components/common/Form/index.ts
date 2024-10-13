@@ -1,5 +1,5 @@
 import FormComponent from './form'
-import FormDefinition from './form.dt'
+import FormDefinition from './form.d'
 
 export {
     FormComponent
