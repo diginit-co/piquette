@@ -3,16 +3,13 @@
 import { useState } from "react";
 import { toast } from "~/hooks/use-toast"
 
-import { FormComponent } from "~/components/common";
-import { type FormDefinition } from "~/components/common/Form/form.dt";
+import { exampleConfig } from "~/app/_components/Example/example.config";
+import { FormComponent } from "~/components/common"; 
+
 
 import { api } from "~/trpc/react";
 
-interface FavoriteFormProps {
-    formConfig: FormDefinition
-}
-
-export function ExampleForm({formConfig } : FavoriteFormProps) {
+export function ExampleForm() {
   const utils = api.useUtils();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -38,6 +35,6 @@ export function ExampleForm({formConfig } : FavoriteFormProps) {
     };
 
   return (
-    <FormComponent formConfig={formConfig} onSubmit={handleFormSubmit} />
+    <FormComponent formConfig={exampleConfig.form} onSubmit={handleFormSubmit} />
   );
 }

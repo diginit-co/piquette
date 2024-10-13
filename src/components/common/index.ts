@@ -5,6 +5,7 @@ import BreadcrumbsComponent from './breadcrumbs'
 import ChatComponent from './chat'
 import FooterComponent from './footer'
 import FormComponent from './Form/form'
+import FormDefinition from './Form/form.dt'
 import HeaderComponent from './header'
 import NavbarComponent from './navbar'
 import NotificationsComponent from './notifications'
@@ -23,3 +24,5 @@ export {
     NotificationsComponent,
     ProfileComponent
 } 
+
+export type { FormDefinition }
