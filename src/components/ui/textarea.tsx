@@ -4,6 +4,8 @@ import { cn } from "~/lib/utils"
 
 type TextAreaProps = {
   value: string;
+  name?: string;
+  onBlur?: (event: React.FocusEvent<HTMLTextAreaElement>) => void;
   onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   placeholder?: string;
   rows?: number;

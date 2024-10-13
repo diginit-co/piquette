@@ -22,7 +22,8 @@ interface CustomFormProps {
 interface Action {
     label: string
     type: "dialog" | "link"
-    Form: React.ReactNode
+    Form?: React.ReactNode
+    href?: string
 }
 
 interface HeaderComponentProps {
@@ -65,7 +66,7 @@ export default function HeaderComponent({ title, description, actions }: HeaderC
                 </Dialog>
               }
               {item.type === "link" &&
-                <Link href={""} passHref>
+                <Link href={item.href ?? ""} passHref>
                   <Button variant="outline" size="sm">
                     {item.label}
                   </Button>

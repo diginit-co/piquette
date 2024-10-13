@@ -4,7 +4,7 @@ import AlertComponent from './alert'
 import BreadcrumbsComponent from './breadcrumbs'
 import ChatComponent from './chat'
 import FooterComponent from './footer'
-import FormComponent from './form'
+import FormComponent from './Form/form'
 import HeaderComponent from './header'
 import NavbarComponent from './navbar'
 
