@@ -5,7 +5,7 @@ import { type Metadata } from "next";
 
 import { HeaderComponent } from '~/components/common';
 import { ExampleForm } from '~/app/_components/Example';
-import { type FormDefinition } from '~/components/common/Form/form.dt';
+
 import Column from '~/components/templates/column';
 
 export const metadata: Metadata = {
@@ -14,32 +14,6 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-const formConfig: FormDefinition = {
-  headline: "Example Form",
-  description: "This is an example form",
-  fields: [
-    [
-      {label: "Name", type: "text", name: "name", required: true},
-      {label: "Email", type: "email", name: "email", required: true},
-      {label: "Phone", type: "tel", name: "phone", required: true},
-    ],
-    [
-      {label: "Description", type: "textarea", name: "description", required: true},
-      
-    ],
-    [
-      {label: 'Favorite Color', type: 'select', name: 'favoriteColor', options: ['Red', 'Blue', 'Green'], placeholder: 'Select a color'},
-      {label: 'Favorite Animal', type: 'radio', name: 'favoriteAnimal', options: ['Dog', 'Cat', 'Fish'], placeholder: 'Select an Animal'},
-    ],
-    [
-      {label: 'Operating System', type: 'checkbox', name: 'operatingSystem', options: ['Mac', 'Win', 'Linux'], placeholder: 'Select an OS'},
-    ]
-  ],
-  buttons: [
-    {label: "Cancel", type: "reset", variant: "ghost"},
-    {label: "Submit", type: "submit", variant: "default"}
-  ],
-}
 
 export default async function NewExamplePage() {
   const user = await currentUser()
@@ -54,7 +28,7 @@ export default async function NewExamplePage() {
       {/**
        * In order to keep the page 'server-side', it is necessary to pass the formConfig object to the FormComponent.
        */}
-      <ExampleForm formConfig={formConfig} />
+      <ExampleForm  />
     </Column>
   );
 }
