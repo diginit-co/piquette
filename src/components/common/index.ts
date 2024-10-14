@@ -5,11 +5,13 @@ import BreadcrumbsComponent from './breadcrumbs'
 import ChatComponent from './chat'
 import FooterComponent from './footer'
 import FormComponent from './Form/form'
-import FormDefinition from './Form/form.dt'
+import FormDefinition from './Form/form.d'
 import HeaderComponent from './header'
 import NavbarComponent from './navbar'
 import NotificationsComponent from './notifications'
 import ProfileComponent from './profile'
+import TableComponent from './Table/table'
+import TableDefinition from './Table/table.d'
 
 export {
     AccountDropdownComponent,
@@ -22,7 +24,8 @@ export {
     HeaderComponent,
     NavbarComponent,
     NotificationsComponent,
-    ProfileComponent
+    ProfileComponent,
+    TableComponent
 } 
 
-export type { FormDefinition }
+export type { FormDefinition, TableDefinition }
