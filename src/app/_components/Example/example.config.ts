@@ -15,9 +15,12 @@ const tableStructure: TableDefinition = {
     ],
     filter: true,
     columns: [
+        { label: "ID", accessorKey: "id", type: "text", required: true },
+        
         { label: "Status", accessorKey: "status", type: "text", required: true },
-        { label: "Email", accessorKey: "email", type: "email", required: true },
         { label: "Amount", accessorKey: "amount", type: "tel", required: true },
+        { label: "Email", accessorKey: "email", type: "email", required: true },
+        
     ]
 }
 
@@ -43,6 +46,9 @@ const formStructure: FormDefinition = {
   ]
 }
 
+/**
+ * Export the exampleConfig object
+ */
 export const exampleConfig = {
     form: formStructure,
     table: tableStructure
