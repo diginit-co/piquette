@@ -1,6 +1,13 @@
 import "~/styles/globals.css";
 import React from "react";
 
+import { storyblokInit, apiPlugin } from "@storyblok/react";
+ 
+storyblokInit({
+  accessToken: "hZjLlW0580fxXS6sy3pL8Qtt",
+  use: [apiPlugin]
+});
+
 import { piquetteConfig } from "~/config";
 
 import { type Metadata } from "next";
