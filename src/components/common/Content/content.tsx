@@ -1,5 +1,22 @@
-interface ContentComponentProps {
-    story: { content?: { body: ComponentType[] } };
+interface StoryContent {
+    _uid?: string; // Make this optional
+    body: ComponentType[];
+    component?: string; // Make this optional
+  }
+  
+  interface ContentComponentProps {
+    story: {
+      name: string;
+      content: StoryContent;
+    };
+  }
+  
+  interface ComponentType {
+    component: 'grid' | 'teaser' | string; // Allow for future types
+    _uid: string;
+    headline?: string;
+    description?: string;
+    items?: GridComponentProps['fields']; // Items for the grid component
   }
   
   type GridComponentProps = {
@@ -19,15 +36,6 @@ interface ContentComponentProps {
       description: string;
     };
   };
-  
-  interface ComponentType {
-    component: 'grid' | 'teaser'; // Restricted to specific types
-    _uid: string;
-    headline?: string;
-    description?: string;
-    items?: GridComponentProps['fields'];
-    [key: string]: unknown;
-  }
   
   export default function ContentComponent({ story }: ContentComponentProps) {
     const contents = story?.content?.body;
@@ -70,17 +78,6 @@ interface ContentComponentProps {
               {fields.headline}
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600">{fields.description}</p>
-          </div>
-          <div className="mt-16 flow-root sm:mt-24">
-            <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
-              <img
-                alt="App screenshot"
-                src="https://tailwindui.com/plus/img/component-images/project-app-screenshot.png"
-                width={2432}
-                height={1442}
-                className="rounded-md shadow-2xl ring-1 ring-gray-900/10"
-              />
-            </div>
           </div>
         </div>
       </div>
