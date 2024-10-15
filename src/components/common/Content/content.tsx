@@ -46,7 +46,7 @@ interface ContentComponentProps {
             component: "grid" | "teaser";
             _uid: string;
             headline?: string;
-            desciption?: string;
+            description?: string;
         }[]
     }
 }
@@ -60,7 +60,7 @@ return (
                     return <TeaserComponent key={section._uid} fields={{ 
                         _uid: section._uid, 
                         headline: section.headline ?? "", 
-                        description: section.desciption ?? "",
+                        description: section.description ?? "",
                     }} />;
                 default:
                     return <section key={section._uid}>Unknown Component<div><pre>{JSON.stringify(section, null, 2)}</pre></div></section>;
@@ -69,33 +69,6 @@ return (
     </>
 )
   
-    // if (!contents || contents.length === 0) {
-    //   return <section>No content available</section>;
-    // }
-  
-    // return (
-    //   <>
-    //     {contents.map((item) => {
-    //       switch (item.component) {
-    //         case 'teaser':
-    //           return (
-    //             <TeaserComponent
-    //               key={item._uid}
-    //               fields={{
-    //                 _uid: item._uid,
-    //                 headline: item.headline ?? '',
-    //                 description: item.description ?? '',
-    //               }}
-    //             />
-    //           );
-    //         case 'grid':
-    //           return <GridComponent key={item._uid} fields={item.items ?? []} />;
-    //         default:
-    //           return <section key={item._uid}>Unknown Component</section>;
-    //       }
-    //     })}
-    //   </>
-    // );
     
   }
   
