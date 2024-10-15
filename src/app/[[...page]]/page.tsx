@@ -1,68 +1,70 @@
-// import { api, HydrateClient } from "~/trpc/server";
+import { getStoryblokApi } from '~/lib/storyblok'; // Helper to initialize Storyblok API
+import { notFound } from 'next/navigation'; // To handle 404 pages
+import { ContentComponent } from '~/components/common';
 
-// import Column from "~/components/templates/column";
-// export default async function HomePage() {
-//   const RestResponse = await api.rest.get(
-//     {
-//       url: "https://cdn.contentful.com/spaces/3lo7q5ucxiwp/environments/master/entries/1wIAnTvZaIj4KXikSW06rd",
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: "Bearer qXLJSqiXVc7TT-XiIYKMDdHTE77LhbZmTooj3M-shEU",
-//       },
-//     },
-//   );
+interface PageProps {
+  params: {
+    page?: string[]; // Dynamic path segments from the URL
+  };
+}
 
-//   void api.post.getLatest.prefetch();
+// Define a more specific type for Storyblok's content
+interface StoryContent {
+  _uid: string;
+  body: Array<{
+      _uid: string;
+      component: 'grid' | 'teaser';
+      headline?: string;
+      description?: string;
+  }>;
+  component: string;
+}
 
-//   return (
-//     <HydrateClient>
-//       <Column>
-//         {JSON.stringify(RestResponse, null, 2)}
-//       </Column>
-//     </HydrateClient>
-//   );
-// }
+interface StoryblokResponse {
+  story: {
+  name: string;
+  created_at: string;
+  published_at: string;
+  id: number;
+  uuid: string;
+  content: StoryContent;
+  slug: string;
+  full_slug: string;
+  sort_by_date: null | string;
+  position: number;
+  tag_list: Array<string>;
+  is_startpage: boolean;
+  parent_id: number;
+  group_id: string;
+  first_published_at: string;
+  release_id: null | string;
+  lang: string;
+  path: null | string;
+  default_full_slug: null | string;
+  translated_slugs: null | string;
+}
+}
 
-// app/page.js
-import Column from "~/components/templates/column";
-import { getStoryblokApi, type ISbStoryData } from "@storyblok/react"; // Ensure types are imported if available
-
-export const metadata = {
-  title: "Create Next App",
-  icons: {
-    icon: "/favicon.ico",
-  },
-};
-
-export default async function Home() {
-  // Define the slug for the page you are fetching
-  const slug = "/landing";
-  
-  // Set Storyblok API params (typed as const)
-  const sbParams = { version: "published" as const };
-
-  // Get Storyblok API
+export default async function Page({ params }: PageProps) {
+  const slug = params.page ? params.page.join('/') : 'home';
   const storyblokApi = getStoryblokApi();
-  
-  // Fetch data from Storyblok API
-  let story: ISbStoryData | null = null;
 
   try {
-    const response = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-    story = response?.data?.story || null; // Safely assign the story
-  } catch (error) {
-    console.error("Error fetching Storyblok data:", error);
-  }
+    const response = await storyblokApi.get(`cdn/stories/${slug}`, { version: 'published' as const });
+    const storyData = response.data as StoryblokResponse;
 
-  // Render the story or an error message
-  return (
-    <Column>
-      {story ? (
-        <pre>{JSON.stringify(story, null, 2)}</pre>
-      ) : (
-        <p>No story found or failed to fetch the story.</p>
-      )}
-    </Column>
-  );
+    if (!storyData) {
+      return notFound();
+    }
+
+    const stories = storyData.story.content;
+    const name = storyData.story.name;
+    const uuid = storyData.story.uuid;
+
+    return <ContentComponent name={name} uuid={uuid} stories={stories} />;
+        
+    } catch (error) {
+        console.error('Error fetching Storyblok story:', error);
+        return notFound();
+    }
 }
