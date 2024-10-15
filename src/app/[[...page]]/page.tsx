@@ -35,13 +35,11 @@ interface StoryblokResponse {
   tag_list: Array<string>;
   is_startpage: boolean;
   parent_id: number;
-  meta_data: null | any;
   group_id: string;
   first_published_at: string;
   release_id: null | string;
   lang: string;
   path: null | string;
-  alternates: Array<any>;
   default_full_slug: null | string;
   translated_slugs: null | string;
 }
