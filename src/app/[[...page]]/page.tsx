@@ -10,28 +10,48 @@ interface PageProps {
 
 // Define a more specific type for Storyblok's content
 interface StoryContent {
+  _uid: string;
   body: Array<{
-    component: string;
-    _uid: string;
-    headline?: string; // Optional, since not every component will have this
-    description?: string; // Optional, same reason
-    items?: Array<{
       _uid: string;
-      headline: string;
-      description: string;
-      url: string;
-      alt: string;
-    }>; // If there's a grid component with items
+      headline?: string;
+      component: 'grid' | 'teaser';
+      description?: string;
+      items?: Array<{
+          _uid: string;
+          headline: string;
+          description: string;
+          url: string;
+          alt: string;
+      }>;
   }>;
+  component: string;
 }
 
-// Define the expected structure of the Storyblok response
 interface StoryblokResponse {
   story: {
-    content: StoryContent;
-    name: string;
-    [key: string]: unknown; // Indexer if you have dynamic fields
-  } | null;
+  name: string;
+  created_at: string;
+  published_at: string;
+  id: number;
+  uuid: string;
+  content: StoryContent;
+  slug: string;
+  full_slug: string;
+  sort_by_date: null | string;
+  position: number;
+  tag_list: Array<string>;
+  is_startpage: boolean;
+  parent_id: number;
+  meta_data: null | any;
+  group_id: string;
+  first_published_at: string;
+  release_id: null | string;
+  lang: string;
+  path: null | string;
+  alternates: Array<any>;
+  default_full_slug: null | string;
+  translated_slugs: null | string;
+}
 }
 
 export default async function Page({ params }: PageProps) {
@@ -42,21 +62,18 @@ export default async function Page({ params }: PageProps) {
     const response = await storyblokApi.get(`cdn/stories/${slug}`, { version: 'published' as const });
     const storyData = response.data as StoryblokResponse;
 
-    const story = storyData.story;
-
-
-    if (!story) {
+    if (!storyData) {
       return notFound();
     }
 
-    // Ensure the story.content has required properties
-    const storyContent: StoryContent = {
-      body: story.content.body,
-    };
+    const stories = storyData.story.content;
+    const name = storyData.story.name;
+    const uuid = storyData.story.uuid;
 
-    return <ContentComponent story={{ name: story.name, content: storyContent }} />;
-  } catch (error) {
-    console.error('Error fetching Storyblok story:', error);
-    return notFound();
-  }
+    return <ContentComponent name={name} uuid={uuid} stories={stories} />;
+        
+    } catch (error) {
+        console.error('Error fetching Storyblok story:', error);
+        return notFound();
+    }
 }
