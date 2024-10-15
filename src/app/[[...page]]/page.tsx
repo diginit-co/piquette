@@ -13,16 +13,9 @@ interface StoryContent {
   _uid: string;
   body: Array<{
       _uid: string;
-      headline?: string;
       component: 'grid' | 'teaser';
+      headline?: string;
       description?: string;
-      items?: Array<{
-          _uid: string;
-          headline: string;
-          description: string;
-          url: string;
-          alt: string;
-      }>;
   }>;
   component: string;
 }
