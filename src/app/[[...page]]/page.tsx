@@ -10,17 +10,17 @@ interface PageProps {
 export default async function Page({ params }: PageProps) {
   const slug = params.page ? params.page.join('/') : 'home'; // Default to 'home' if no path is provided
 
-  const sbParams = {
-    version: 'published', // You can change this to 'draft' if needed for preview mode
-  };
+  // const sbParams = {
+  //   version: 'published', // You can change this to 'draft' if needed for preview mode
+  // };
 
   const storyblokApi = getStoryblokApi();
 
-
   try {
     // Fetch the story from Storyblok
-    const { data } = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
-    const story = data?.story || null;
+    const response = await storyblokApi.get(`cdn/stories/${slug}`, { version: 'published' as const });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+    const story = response.data?.story ? response.data.story : null;
 
     // If no story is found, show a 404 page
     if (!story) {
@@ -30,7 +30,8 @@ export default async function Page({ params }: PageProps) {
     // Return the story content to be displayed
     return (
       <div>
-        <pre>{JSON.stringify(story.content, null, 2)}</pre>
+        {/* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */}
+        <pre>{JSON.stringify(story?.content ?? {}, null, 2)}</pre>
       </div>
     );
   } catch (error) {
