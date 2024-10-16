@@ -1,70 +1,170 @@
-import { getStoryblokApi } from '~/lib/storyblok'; // Helper to initialize Storyblok API
+import Link from "next/link";
+import { Button } from "~/components/ui/button";
 import { notFound } from 'next/navigation'; // To handle 404 pages
-import { ContentComponent } from '~/components/common';
 
-interface PageProps {
+// Define the props type for the page
+interface DefaultPageProps {
   params: {
     page?: string[]; // Dynamic path segments from the URL
   };
 }
 
-// Define a more specific type for Storyblok's content
-interface StoryContent {
-  _uid: string;
-  body: Array<{
-      _uid: string;
-      component: 'grid' | 'teaser';
-      headline?: string;
-      description?: string;
-  }>;
-  component: string;
+// Refined type for Storyblok's content sections
+interface ContentComponentProps {
+  page: {
+    page: string;
+    name: string;
+    description: string;
+    sections: {
+      component: "grid" | "hero"; // Restrict to specific component types
+      content: {
+        headline: string;
+        description: string;
+        buttons: {
+          label: string;
+          variant: "default" | "outline" | "ghost" | "link" | "secondary"; // Restrict to specific variant types
+          action: {
+            type: "link" | "dialog"; // Restrict action type
+            href: string;
+          };
+        }[];
+      };
+    }[];
+  };
 }
 
-interface StoryblokResponse {
-  story: {
-  name: string;
-  created_at: string;
-  published_at: string;
-  id: number;
-  uuid: string;
-  content: StoryContent;
-  slug: string;
-  full_slug: string;
-  sort_by_date: null | string;
-  position: number;
-  tag_list: Array<string>;
-  is_startpage: boolean;
-  parent_id: number;
-  group_id: string;
-  first_published_at: string;
-  release_id: null | string;
-  lang: string;
-  path: null | string;
-  default_full_slug: null | string;
-  translated_slugs: null | string;
-}
-}
-
-export default async function Page({ params }: PageProps) {
+// This is the default export, which Next.js expects for a page component
+export default function DefaultPage({ params }: DefaultPageProps) {
   const slug = params.page ? params.page.join('/') : 'home';
-  const storyblokApi = getStoryblokApi();
+  const page = cmsData.find((page) => page.page === slug);
 
-  try {
-    const response = await storyblokApi.get(`cdn/stories/${slug}`, { version: 'published' as const });
-    const storyData = response.data as StoryblokResponse;
+  // If page is not found, return 404
+  if (!page) {
+    return notFound();
+  }
 
-    if (!storyData) {
-      return notFound();
-    }
-
-    const stories = storyData.story.content;
-    const name = storyData.story.name;
-    const uuid = storyData.story.uuid;
-
-    return <ContentComponent name={name} uuid={uuid} stories={stories} />;
-        
-    } catch (error) {
-        console.error('Error fetching Storyblok story:', error);
-        return notFound();
-    }
+  // Render the ContentComponent with the page data
+  return (
+    <section>
+      {page.sections.map((section, idx) => {
+        switch (section.component) {
+          case 'hero':
+            return (
+              <HeroComponent
+                key={idx}
+                fields={{
+                  headline: section.content.headline,
+                  description: section.content.description,
+                  buttons: section.content.buttons.map((button) => ({
+                    label: button.label,
+                    variant: button.variant,
+                    action: {
+                      type: button.action.type,
+                      href: button.action.href,
+                    },
+                  })),
+                }}
+              />
+            );
+          default:
+            return (
+              <div key={idx}>
+                <strong>Unknown Component: {section.component}</strong>
+                <pre>{JSON.stringify(section, null, 2)}</pre>
+              </div>
+            );
+        }
+      })}
+    </section>
+  );
 }
+
+
+// HeroComponent to render hero sections
+type HeroComponentProps = {
+  fields: {
+    headline?: string;
+    description?: string;
+    buttons?: {
+      label: string;
+      variant: "default" | "outline" | "ghost" | "link" | "secondary";
+      action: {
+        type: "link" | "dialog";
+        href: string;
+      };
+    }[];
+  };
+};
+
+function HeroComponent({ fields }: HeroComponentProps) {
+  return (
+    <div className="bg-white">
+      <div className="px-6 py-24 sm:px-6 sm:py-32 lg:px-8">
+        <div className="mx-auto max-w-2xl text-center">
+          {fields.headline && (
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              {fields.headline}
+            </h2>
+          )}
+
+          {fields.description && (
+            <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600">
+              {fields.description}
+            </p>
+          )}
+
+          {fields.buttons && (
+            <div className="mt-10 flex items-center justify-center gap-x-6">
+              {fields.buttons.map((button, idx) => (
+                <Link
+                  key={idx}
+                  href={button.action.href}
+                  target={button.action.href.includes("https://") ? "_blank" : ""}
+                >
+                  <Button variant={button.variant}>{button.label}</Button>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Example data structure to simulate CMS data
+const cmsData: ContentComponentProps['page'][] = [
+  {
+    page: 'home',
+    name: 'Home Page',
+    description: 'This is the home page',
+    sections: [
+      {
+        component: 'hero',
+        content: {
+          headline: 'Build Tomorrow’s Ideas Today',
+          description:
+            'Piquette is a low-code development factory that accelerates the creation of high-quality applications for entrepreneurs and developers alike.',
+          buttons: [
+            {
+              label: 'Get Started',
+              variant: 'outline',
+              action: {
+                type: 'link',
+                href: 'https://github.com/diginit-co/piquette',
+              },
+            },
+            {
+              label: 'Learn More',
+              variant: 'default',
+              action: {
+                type: 'link',
+                href: 'https://calendar.app.google/5BhtCHDZ15DBGXhn9',
+              },
+            },
+          ],
+        },
+      },
+    ],
+  },
+];
