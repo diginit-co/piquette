@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { notFound } from 'next/navigation'; // To handle 404 pages
 
+// Define the props type for the page
 interface DefaultPageProps {
   params: {
     page?: string[]; // Dynamic path segments from the URL
@@ -32,18 +33,21 @@ interface ContentComponentProps {
   };
 }
 
+// This is the default export, which Next.js expects for a page component
 export default function DefaultPage({ params }: DefaultPageProps) {
   const slug = params.page ? params.page.join('/') : 'home';
   const page = cmsData.find((page) => page.page === slug) as ContentComponentProps['page'];
 
-  // if page is not found, return 404
+  // If page is not found, return 404
   if (!page) {
     return notFound();
   }
 
+  // Render the ContentComponent with the page data
   return <ContentComponent page={page} />;
 }
 
+// Helper component to render sections of the page
 export function ContentComponent({ page }: ContentComponentProps) {
   return (
     <section>
@@ -80,6 +84,7 @@ export function ContentComponent({ page }: ContentComponentProps) {
   );
 }
 
+// HeroComponent to render hero sections
 type HeroComponentProps = {
   fields: {
     headline?: string;
@@ -131,7 +136,7 @@ function HeroComponent({ fields }: HeroComponentProps) {
   );
 }
 
-// Example cmsData
+// Example data structure to simulate CMS data
 const cmsData: ContentComponentProps['page'][] = [
   {
     page: 'home',
@@ -142,7 +147,8 @@ const cmsData: ContentComponentProps['page'][] = [
         component: 'hero',
         content: {
           headline: 'Build Tomorrow’s Ideas Today',
-          description: 'Piquette is a low-code development factory that accelerates the creation of high-quality applications for entrepreneurs and developers alike.',
+          description:
+            'Piquette is a low-code development factory that accelerates the creation of high-quality applications for entrepreneurs and developers alike.',
           buttons: [
             {
               label: 'Get Started',
