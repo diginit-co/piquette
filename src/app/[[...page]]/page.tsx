@@ -44,11 +44,6 @@ export default function DefaultPage({ params }: DefaultPageProps) {
   }
 
   // Render the ContentComponent with the page data
-  return <ContentComponent page={page} />;
-}
-
-// Helper component to render sections of the page
-export function ContentComponent({ page }: ContentComponentProps) {
   return (
     <section>
       {page.sections.map((section, idx) => {
@@ -83,6 +78,7 @@ export function ContentComponent({ page }: ContentComponentProps) {
     </section>
   );
 }
+
 
 // HeroComponent to render hero sections
 type HeroComponentProps = {
