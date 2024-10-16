@@ -13,8 +13,8 @@ interface ContentComponentProps {
                 description: string;
                 buttons: {
                     label: string;
+                    variant: "default" | "outline" | "ghost" | "link" | "secondary";
                     action: {
-                        variant: "default" | "outline" | "ghost" | "link" | "secondary";
                         type: "link" | "dialog";
                         href: string;
                     };
@@ -35,8 +35,9 @@ export default function ContentComponent({ page }: ContentComponentProps) {
                       description: section.content.description, 
                       buttons: section.content.buttons.map(button => ({ 
                           label: button.label, 
+                          variant: button.variant,
                           action: { 
-                              variant: button.action.variant, // Default variant or adjust accordingly
+                               // Default variant or adjust accordingly
                               type: button.action.type, // Default type or adjust accordingly
                               href: button.action.href, // Default href or adjust accordingly
                           } 
@@ -61,8 +62,8 @@ type HeroComponentProps = {
     description?: string;
     buttons?: {
       label: string;
+      variant: "default" | "outline" | "ghost" | "link" | "secondary";
       action: {
-        variant: "default" | "outline" | "ghost" | "link" | "secondary";
         type: "link" | "dialog";
         href: string;
       }
@@ -98,7 +99,7 @@ function HeroComponent({ fields }: HeroComponentProps) {
                   target={button.action.href.includes("https://") ? "_blank" : ""}
                 >
                   <Button
-                    variant={button.action.variant}
+                    variant={button.variant}
                   >
                     {button.label}
                   </Button>

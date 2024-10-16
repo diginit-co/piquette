@@ -1,9 +1,6 @@
-
 import { notFound } from 'next/navigation'; // To handle 404 pages
 import { ContentComponent } from '~/components/common';
 import { cmsData } from './content';
-
-type Page = typeof cmsData[number];
 
 interface DefaultPageProps {
   params: {
@@ -25,8 +22,9 @@ interface ContentComponentProps {
               description: string;
               buttons: {
                   label: string;
+                  variant: "default" | "outline" | "ghost" | "link" | "secondary";
                   action: {
-                      variant: "default" | "outline" | "ghost" | "link" | "secondary";
+                      
                       type: "link" | "dialog";
                       href: string;
                   };
@@ -36,7 +34,7 @@ interface ContentComponentProps {
   };
 }
 
-export default async function DefaultPage({ params }: DefaultPageProps) {
+export default  function DefaultPage({ params }: DefaultPageProps) {
   const slug = params.page ? params.page.join('/') : 'home';
   const page = cmsData.find(page => page.page === slug) as Page;
 
@@ -46,6 +44,30 @@ export default async function DefaultPage({ params }: DefaultPageProps) {
   }
 
   return (
-    <ContentComponent page={page as ContentComponentProps['page']} />
+    <ContentComponent page={page} />
   )
+}
+
+interface PageProps {
+  page: {
+    page: string;
+    name: string;
+    description: string;
+    sections: {
+        component: string;
+        content: {
+            headline: string;
+            description: string;
+            buttons: {
+                label: string;
+                variant: string;
+                action: {
+                    type: string;
+                    href: string;
+                };
+            }[];
+        };
+    }[];
+  }
+  
 }
