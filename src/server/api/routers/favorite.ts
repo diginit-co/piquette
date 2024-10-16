@@ -35,7 +35,8 @@ export const favoriteRouter = createTRPCRouter({
       try {
         const decodedToken = jwt.decode(authToken) as { sub: string } | null;
 
-        if (!decodedToken || !decodedToken.sub) {
+    
+        if (!decodedToken?.sub) {
           throw new Error("Unauthorized: Invalid token");
         }
 
@@ -88,7 +89,7 @@ export const favoriteRouter = createTRPCRouter({
       try {
         const decodedToken = jwt.decode(authToken) as { sub: string } | null;
 
-        if (!decodedToken || !decodedToken.sub) {
+        if (!decodedToken?.sub) {
           throw new Error("Unauthorized: Invalid token");
         }
 
