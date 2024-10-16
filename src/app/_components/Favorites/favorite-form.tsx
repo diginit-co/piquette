@@ -35,8 +35,6 @@ export function FavoriteForm({ userId, setDialogOpen }: FavoriteFormProps) {
     void createFavorite.mutateAsync({
       type: data.type as string,
       object: data.object as string,
-      createdBy: "Brooke", 
-      updatedBy: "Brooke",
     });
   };
 
