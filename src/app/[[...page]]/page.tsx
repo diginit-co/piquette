@@ -36,7 +36,7 @@ interface ContentComponentProps {
 // This is the default export, which Next.js expects for a page component
 export default function DefaultPage({ params }: DefaultPageProps) {
   const slug = params.page ? params.page.join('/') : 'home';
-  const page = cmsData.find((page) => page.page === slug)! as ContentComponentProps['page'];
+  const page = cmsData.find((page) => page.page === slug);
 
   // If page is not found, return 404
   if (!page) {
