@@ -1,8 +1,7 @@
-import Head from 'next/head';
+
 import { notFound } from 'next/navigation'; // To handle 404 pages
 import { ContentComponent } from '~/components/common';
 import { cmsData } from './content';
-import { Content } from 'vaul';
 
 type Page = typeof cmsData[number];
 
