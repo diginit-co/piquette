@@ -72,19 +72,19 @@ const cmsData: Page[] = [
         headline: 'Build Tomorrow’s Ideas Today',
         description:
           'Piquette is a low-code development factory that accelerates the creation of high-quality applications for entrepreneurs and developers alike.',
-        body: `
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.  
-          Vivamus lacinia odio vitae vestibulum vestibulum.  
-          Cras venenatis euismod malesuada.  
+        // body: `
+        //   Lorem ipsum dolor sit amet, consectetur adipiscing elit.  
+        //   Vivamus lacinia odio vitae vestibulum vestibulum.  
+        //   Cras venenatis euismod malesuada.  
 
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.  
-          Vivamus lacinia odio vitae vestibulum vestibulum.  
-          Cras venenatis euismod malesuada.  
+        //   Lorem ipsum dolor sit amet, consectetur adipiscing elit.  
+        //   Vivamus lacinia odio vitae vestibulum vestibulum.  
+        //   Cras venenatis euismod malesuada.  
 
-          1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.  
-          2. Vivamus lacinia odio vitae vestibulum vestibulum.  
-          3. Cras venenatis euismod malesuada.
-        `,
+        //   1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.  
+        //   2. Vivamus lacinia odio vitae vestibulum vestibulum.  
+        //   3. Cras venenatis euismod malesuada.
+        // `,
         buttons: [
           {
             label: 'Get Started',
@@ -104,26 +104,26 @@ const cmsData: Page[] = [
           },
         ],
       },
-      {
-        type: 'columns',
-        columns: [
-          {
-            headline: 'Column 1',
-            description: 'Description for column 1',
-            buttons: [],
-          },
-          {
-            headline: 'Column 2',
-            description: 'Description for column 2',
-            buttons: [],
-          },
-          {
-            headline: 'Column 3',
-            description: 'Description for column 2',
-            buttons: [],
-          },
-        ],
-      },
+      // {
+      //   type: 'columns',
+      //   columns: [
+      //     {
+      //       headline: 'Column 1',
+      //       description: 'Description for column 1',
+      //       buttons: [],
+      //     },
+      //     {
+      //       headline: 'Column 2',
+      //       description: 'Description for column 2',
+      //       buttons: [],
+      //     },
+      //     {
+      //       headline: 'Column 3',
+      //       description: 'Description for column 2',
+      //       buttons: [],
+      //     },
+      //   ],
+      // },
     ],
   },
 ];
@@ -194,7 +194,7 @@ function ContentSectionComponent({ fields }: { fields: ContentSection }) {
 // ColumnsSection Component
 function ColumnsSectionComponent({ columns }: { columns: BaseSection[] }) {
   return (
-    <div className="grid grid-cols-3 gap-4 container border mx-auto">
+    <div className="grid grid-cols-3 gap-4 container mx-auto">
       {columns.map((column, idx) => (
         <div key={idx} className="p-4">
           {column.headline && <h3 className="font-bold">{column.headline}</h3>}
