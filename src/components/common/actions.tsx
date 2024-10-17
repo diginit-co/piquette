@@ -116,13 +116,6 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
     const [currentType, setCurrentType] = useState<string | null>(null);
     const [currentObject, setCurrentObject] = useState<string | null>(null);
 
-    console.log(`currentAction: ${currentAction}`)
-    console.log(`currentType: ${currentType}`)
-    console.log(`currentObject: ${currentObject}`)
-    console.log(`currentId: ${currentId}`)
-    console.log(`currentKey: ${currentKey}`)
-    console.log(`openDialog: ${openDialog}`)
-
     /** Favorites
      * 
      * removeFavoriteMutation: A mutation to remove a favorite from the database.
@@ -140,9 +133,7 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
         try {
             await addFavorite({
                 type: currentType,
-                object: currentObject,
-                createdBy: "Brooke",
-                updatedBy: "Brooke"
+                object: currentObject
             });
             toast({
                 variant: "default",
@@ -171,7 +162,7 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
         }
     };
 
-    const addFavorite = async (params: { type: string; object: string; createdBy: string; updatedBy: string; }) => {
+    const addFavorite = async (params: { type: string; object: string; }) => {
         try {
             await addFavoriteMutation.mutateAsync(params);
             console.log("Favorite added successfully");
