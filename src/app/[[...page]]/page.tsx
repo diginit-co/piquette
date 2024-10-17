@@ -1,104 +1,160 @@
 import Link from "next/link";
+import ReactMarkdown from 'react-markdown';
 import { Button } from "~/components/ui/button";
-import { notFound } from 'next/navigation'; // To handle 404 pages
+import { notFound } from 'next/navigation';
 
-// Define the props type for the page
+// Define Button and common Action type
+interface Action {
+  type: "link" | "dialog";
+  href: string;
+}
+
+interface Button {
+  label: string;
+  variant: "default" | "outline" | "ghost" | "link" | "secondary";
+  action: Action;
+}
+
+// Base structure for a Section, common for all types
+interface BaseSection {
+  headline?: string;
+  description?: string;
+  body?: string; // For markdown content
+  buttons?: Button[];
+}
+
+// Specific Section Types
+interface ContentSection extends BaseSection {
+  type: "content";
+}
+
+interface ColumnsSection extends BaseSection {
+  type: "columns";
+  columns: BaseSection[];
+}
+
+// Other types like 'grid' and 'hero' can be added similarly
+interface GridSection extends BaseSection {
+  type: "grid";
+}
+
+interface HeroSection extends BaseSection {
+  type: "hero";
+}
+
+// Union of all section types
+type Section = ContentSection | ColumnsSection | GridSection | HeroSection;
+
+// Page Interface
+interface Page {
+  page: string;
+  name: string;
+  description: string;
+  sections: Section[];
+}
+
+// Props for the DefaultPage component
 interface DefaultPageProps {
   params: {
-    page?: string[]; // Dynamic path segments from the URL
+    page?: string[];
   };
 }
 
-// Refined type for Storyblok's content sections
-interface ContentComponentProps {
-  page: {
-    page: string;
-    name: string;
-    description: string;
-    sections: {
-      component: "grid" | "hero"; // Restrict to specific component types
-      content: {
-        headline: string;
-        description: string;
-        buttons: {
-          label: string;
-          variant: "default" | "outline" | "ghost" | "link" | "secondary"; // Restrict to specific variant types
-          action: {
-            type: "link" | "dialog"; // Restrict action type
-            href: string;
-          };
-        }[];
-      };
-    }[];
-  };
-}
+// Example CMS data
+const cmsData: Page[] = [
+  {
+    page: 'home',
+    name: 'Home Page',
+    description: 'This is the home page',
+    sections: [
+      {
+        type: 'content',
+        headline: 'Build Tomorrow’s Ideas Today',
+        description:
+          'Piquette is a low-code development factory that accelerates the creation of high-quality applications for entrepreneurs and developers alike.',
+        body: `
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.  
+          Vivamus lacinia odio vitae vestibulum vestibulum.  
+          Cras venenatis euismod malesuada.  
 
-// This is the default export, which Next.js expects for a page component
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.  
+          Vivamus lacinia odio vitae vestibulum vestibulum.  
+          Cras venenatis euismod malesuada.  
+
+          1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.  
+          2. Vivamus lacinia odio vitae vestibulum vestibulum.  
+          3. Cras venenatis euismod malesuada.
+        `,
+        buttons: [
+          {
+            label: 'Get Started',
+            variant: 'outline',
+            action: {
+              type: 'link',
+              href: 'https://github.com/diginit-co/piquette',
+            },
+          },
+          {
+            label: 'Learn More',
+            variant: 'default',
+            action: {
+              type: 'link',
+              href: 'https://calendar.app.google/5BhtCHDZ15DBGXhn9',
+            },
+          },
+        ],
+      },
+      {
+        type: 'columns',
+        columns: [
+          {
+            headline: 'Column 1',
+            description: 'Description for column 1',
+            buttons: [],
+          },
+          {
+            headline: 'Column 2',
+            description: 'Description for column 2',
+            buttons: [],
+          },
+          {
+            headline: 'Column 3',
+            description: 'Description for column 2',
+            buttons: [],
+          },
+        ],
+      },
+    ],
+  },
+];
+
+// DefaultPage Component
 export default function DefaultPage({ params }: DefaultPageProps) {
   const slug = params.page ? params.page.join('/') : 'home';
   const page = cmsData.find((page) => page.page === slug);
 
-  // If page is not found, return 404
-  if (!page) {
-    return notFound();
-  }
+  if (!page) return notFound();
 
-  // Render the ContentComponent with the page data
   return (
     <section>
       {page.sections.map((section, idx) => {
-        switch (section.component) {
-          case 'hero':
-            return (
-              <HeroComponent
-                key={idx}
-                fields={{
-                  headline: section.content.headline,
-                  description: section.content.description,
-                  buttons: section.content.buttons.map((button) => ({
-                    label: button.label,
-                    variant: button.variant,
-                    action: {
-                      type: button.action.type,
-                      href: button.action.href,
-                    },
-                  })),
-                }}
-              />
-            );
+        switch (section.type) {
+          case 'content':
+            return <ContentSectionComponent key={idx} fields={section} />;
+          case 'columns':
+            return <ColumnsSectionComponent key={idx} columns={section.columns} />;
           default:
-            return (
-              <div key={idx}>
-                <strong>Unknown Component: {section.component}</strong>
-                <pre>{JSON.stringify(section, null, 2)}</pre>
-              </div>
-            );
+            return <div key={idx}><strong>Unknown Component: {section.type}</strong></div>;
         }
       })}
     </section>
   );
 }
 
-
-// HeroComponent to render hero sections
-type HeroComponentProps = {
-  fields: {
-    headline?: string;
-    description?: string;
-    buttons?: {
-      label: string;
-      variant: "default" | "outline" | "ghost" | "link" | "secondary";
-      action: {
-        type: "link" | "dialog";
-        href: string;
-      };
-    }[];
-  };
-};
-
-function HeroComponent({ fields }: HeroComponentProps) {
+// ContentSection Component
+function ContentSectionComponent({ fields }: { fields: ContentSection }) {
   return (
-    <div className="bg-white">
+    <div className="bg-white container mx-auto">
       <div className="px-6 py-24 sm:px-6 sm:py-32 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           {fields.headline && (
@@ -106,13 +162,16 @@ function HeroComponent({ fields }: HeroComponentProps) {
               {fields.headline}
             </h2>
           )}
-
           {fields.description && (
             <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600">
               {fields.description}
             </p>
           )}
-
+          {fields.body && (
+            <ReactMarkdown className="mt-6 text-lg leading-8 text-gray-600 max-w-prose">
+              {fields.body}
+            </ReactMarkdown>
+          )}
           {fields.buttons && (
             <div className="mt-10 flex items-center justify-center gap-x-6">
               {fields.buttons.map((button, idx) => (
@@ -132,39 +191,16 @@ function HeroComponent({ fields }: HeroComponentProps) {
   );
 }
 
-// Example data structure to simulate CMS data
-const cmsData: ContentComponentProps['page'][] = [
-  {
-    page: 'home',
-    name: 'Home Page',
-    description: 'This is the home page',
-    sections: [
-      {
-        component: 'hero',
-        content: {
-          headline: 'Build Tomorrow’s Ideas Today',
-          description:
-            'Piquette is a low-code development factory that accelerates the creation of high-quality applications for entrepreneurs and developers alike.',
-          buttons: [
-            {
-              label: 'Get Started',
-              variant: 'outline',
-              action: {
-                type: 'link',
-                href: 'https://github.com/diginit-co/piquette',
-              },
-            },
-            {
-              label: 'Learn More',
-              variant: 'default',
-              action: {
-                type: 'link',
-                href: 'https://calendar.app.google/5BhtCHDZ15DBGXhn9',
-              },
-            },
-          ],
-        },
-      },
-    ],
-  },
-];
+// ColumnsSection Component
+function ColumnsSectionComponent({ columns }: { columns: BaseSection[] }) {
+  return (
+    <div className="grid grid-cols-3 gap-4 container border mx-auto">
+      {columns.map((column, idx) => (
+        <div key={idx} className="p-4">
+          {column.headline && <h3 className="font-bold">{column.headline}</h3>}
+          {column.description && <p>{column.description}</p>}
+        </div>
+      ))}
+    </div>
+  );
+}
