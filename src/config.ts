@@ -70,8 +70,8 @@ export const piquetteConfig = {
     app: {
         features: [
             {id: 'dashboard', label: 'Dashboard', href: '/dashboard', icon: HomeIcon},
-            {id: 'dashboard', label: 'Form Example', href: '/dashboard/example', icon: HomeIcon},
-            {id: 'dashboard', label: 'Wizard WIP', href: '/dashboard/example2', icon: HomeIcon},
+            {id: 'dashboard', label: 'Form Example', href: '/dashboard/-example', icon: HomeIcon},
+            {id: 'dashboard', label: 'Wizard WIP', href: '/dashboard/-example2', icon: HomeIcon},
         ],
         services: [
             {id: 'saved', label: 'Saved', href: '/dashboard/saved', icon: FolderIcon},
