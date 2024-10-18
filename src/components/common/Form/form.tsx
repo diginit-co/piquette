@@ -199,7 +199,7 @@ export default function FormComponent( {onSubmit, formConfig }: FormComponentPro
               key={idx}
               type={button.type}
               variant={button.variant}
-              onClick={button.type === 'reset' ? form.reset : undefined}
+              onClick={button.type === 'reset' ? () => { form.reset(); } : undefined}
             >
               {button.label}
             </Button>
