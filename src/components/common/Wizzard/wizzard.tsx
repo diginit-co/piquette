@@ -57,7 +57,7 @@ export default function WizzardComponent({ onSubmit, formConfig }: FormComponent
 
   const handleNext = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (isSectionValid && visibleSection < formConfig.fields.length - 1) {
+    if (visibleSection < formConfig.fields.length - 1) {
       setVisibleSection(visibleSection + 1);
     }
   };
@@ -132,7 +132,7 @@ export default function WizzardComponent({ onSubmit, formConfig }: FormComponent
                   <Button
                     variant="default"
                     type="submit"
-                    disabled={!isSectionValid}
+                    // disabled={!isSectionValid}
                   >
                     Submit
                   </Button>
@@ -140,7 +140,7 @@ export default function WizzardComponent({ onSubmit, formConfig }: FormComponent
                   <Button
                     variant="default"
                     onClick={handleNext}
-                    disabled={!isSectionValid}
+                    // disabled={!isSectionValid}
                   >
                     Next
                   </Button>
