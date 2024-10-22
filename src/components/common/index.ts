@@ -11,6 +11,7 @@ import NavbarComponent from './navbar'
 import NotificationsComponent from './notifications'
 import ProfileComponent from './profile'
 import TableComponent from './Table/table'
+import WizzardComponent from './Wizzard/wizzard'
 
 import type FormDefinition from './Form/form.d'
 import type TableDefinition from './Table/table.d'
@@ -28,7 +29,8 @@ export {
     NavbarComponent,
     NotificationsComponent,
     ProfileComponent,
-    TableComponent
+    TableComponent,
+    WizzardComponent
 } 
 
 export type { FormDefinition, TableDefinition }
