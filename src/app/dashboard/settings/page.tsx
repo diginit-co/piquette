@@ -1,3 +1,4 @@
+
 import { currentUser } from '@clerk/nextjs/server'
 
 
@@ -5,6 +6,8 @@ import { type Metadata } from "next";
 
 import { HeaderComponent } from '~/components/common';
 import Column from '~/components/templates/column';
+
+import {CancelSettings, PersonalSettings, NotificationSettings} from '~/app/_components/Settings';
 
 export const metadata: Metadata = {
   title: `Settings | Piquette`,
@@ -15,12 +18,22 @@ export const metadata: Metadata = {
 export default async function Home() {
   const user = await currentUser()
 
+
   if (!user) return <div>This is an authenticated route</div>
 
   return (
     <Column>
-      <HeaderComponent title="Settings" />
+      <HeaderComponent
+        title="Settings"
+        description="Manage your account settings"
+        />
       
+      <PersonalSettings />
+
+      <NotificationSettings />
+
+      <CancelSettings />
+
     </Column>
   );
 }

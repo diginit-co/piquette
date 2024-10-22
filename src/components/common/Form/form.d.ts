@@ -18,5 +18,5 @@ export interface Field {
 export interface Button {
     label: string
     type: "submit" | "reset"
-    variant: "default" | "ghost"
+    variant: "default" | "ghost" | "destructive"
 }
