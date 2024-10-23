@@ -26,8 +26,10 @@ interface Favorite {
   archivedBy: string | null;
 }
 
-export function AllFavorites({  }: AllFavoritesProps) {
-  const [AllFavorites] = api.favorite.getAll.useSuspenseQuery();
+export function AllFavorites({ userId}: AllFavoritesProps) {
+  const [AllFavorites] = api.favorite.getByUser.useSuspenseQuery(
+    { createdBy: userId }
+  );
   
 
   if (!AllFavorites || AllFavorites.length === 0) {
