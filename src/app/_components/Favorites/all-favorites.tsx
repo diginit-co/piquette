@@ -58,12 +58,12 @@ export function AllFavorites({ userId}: AllFavoritesProps) {
 
             <div className="min-w-0 px-5">
               <div className="flex items-start gap-x-3">
-                <p className="text-sm font-semibold leading-6 text-gray-900">{item.object}</p>
-                <p className="mt-0.5 whitespace-nowrap rounded-md px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset">
+                <p className="text-sm font-semibold leading-6 text-gray-900">
                   <Link href={`/dashboard/favorites/${item.cuid}`}>
-                    {item.type}
+                    {item.object}
                   </Link>
                 </p>
+                <p className="mt-0.5 whitespace-nowrap rounded-md px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset">{item.type}</p>
               </div>
               <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
                 <p className="whitespace-nowrap">
@@ -76,7 +76,7 @@ export function AllFavorites({ userId}: AllFavoritesProps) {
               </div>
             </div>
             <div className="flex flex-none items-center gap-x-4">
-              <ActionsComponent actions={['remove']} data={{id: item.id, key: item.cuid, object: item.object, type: item.type, label: item.cuid}} />
+              <ActionsComponent actions={['remove']} data={{model: 'favorite', id: item.id, key: item.cuid, object: item.object, type: item.type, label: item.cuid}} />
             </div>            
 
           </ListItem>
@@ -114,7 +114,7 @@ export function AllFavorites({ userId}: AllFavoritesProps) {
                   </div>
                 </div>
                 <div className="flex flex-none items-center gap-x-4">
-                    <ActionsComponent actions={['remove']} data={{id: item.id, key: item.cuid, object: item.object, type: item.type, label: item.cuid}} />
+                    <ActionsComponent actions={['remove']} data={{model: 'favorite', id: item.id, key: item.cuid, object: item.object, type: item.type, label: item.cuid}} />
                 </div>
               </ListItem>
             )) ?? null}

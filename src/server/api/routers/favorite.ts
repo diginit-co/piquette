@@ -60,6 +60,7 @@ export const favoriteRouter = createTRPCRouter({
       key: z.string(),
       type: z.string().min(1),
     }))
+    
     .mutation(async ({ ctx, input }) => {
       await ctx.db.delete(favorites).where(
         and(
@@ -135,7 +136,7 @@ export const favoriteRouter = createTRPCRouter({
       } catch (error: unknown) {
         throw new Error(`Unauthorized: Error decoding token - ${(error as Error).message}`);
       }
-      
+
       const favoritesList = await ctx.db.select()
         .from(favorites)
         .where(eq(favorites.createdBy, input.createdBy))  // Corrected where clause

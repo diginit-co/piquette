@@ -100,6 +100,7 @@ import {
 interface ActionsComponentProps {
     actions: Array<"save" | "like" | "dislike" | "share" | "hide" | "edit" | "archive" | "favorite" | "remove">;
     data: {
+        model: string;
         id: number;
         key: string;
         object: string;
@@ -111,6 +112,7 @@ interface ActionsComponentProps {
 export default function ActionsComponent({ actions, data }: ActionsComponentProps) {
     const [openDialog, setOpenDialog] = useState(false);
     const [currentAction, setCurrentAction] = useState<string | null>(null);
+    const [currentModel, setCurrentModel] = useState<string | null>(null);
     const [currentId, setCurrentId] = useState<number | null>(null);
     const [currentKey, setCurrentKey] = useState<string | null>(null);
     const [currentType, setCurrentType] = useState<string | null>(null);
@@ -292,12 +294,13 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
 
 
 
-    const handleActionClick = (action: string, data: { id: number, key: string, object: string, type: string, label: string }) => {
+    const handleActionClick = (action: string, data: { model: string, id: number, key: string, type: string, object: string, label: string }) => {
         setCurrentAction(action);
+        setCurrentModel(data.model);
         setCurrentId(data.id);
         setCurrentKey(data.key);
-        setCurrentObject(data.object);
         setCurrentType(data.type);
+        setCurrentObject(data.object);
 
 
         if (action === 'remove' || action === 'share' || action === 'archive') {
@@ -324,13 +327,13 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
         }
     };
 
-    const getDialogButtons = (action: string, type: string) => {
+    const getDialogButtons = (action: string, model: string) => {
         switch (action) {
             case 'remove':
                 return (
                     <DialogFooter>
                         <Button variant="ghost" onClick={() => setOpenDialog(false)}>Cancel</Button>
-                        { type === 'favorite' ? 
+                        { currentModel === "favorite" ? 
                             <Button
                                 variant="destructive"
                                 onClick={async () => {
@@ -383,6 +386,7 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
                             <a
                                 onClick={() => handleActionClick(action, {
                                     id: data.id,
+                                    model: data.model,
                                     key: data.key,
                                     object: data.object,
                                     type: data.type,

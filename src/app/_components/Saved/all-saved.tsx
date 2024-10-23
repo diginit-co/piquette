@@ -74,7 +74,7 @@ export function AllSaved({  }: AllSavedProps) {
               </div>
             </div>
             <div className="flex flex-none items-center gap-x-4">
-              <ActionsComponent actions={['favorite', 'like', 'dislike', 'remove']} data={{id: item.id, key: item.cuid, object: item.object, type: item.type, label: item.cuid}} />
+              <ActionsComponent actions={['favorite', 'like', 'dislike', 'remove']} data={{model: 'save', id: item.id, key: item.cuid, object: item.object, type: item.type, label: item.cuid}} />
             </div>            
 
           </ListItem>
@@ -108,7 +108,7 @@ export function AllSaved({  }: AllSavedProps) {
                   </div>
                 </div>
                 <div className="flex flex-none items-center gap-x-4">
-                    <ActionsComponent actions={['remove']} data={{id: item.id, key: item.cuid, object: item.object, type: item.type, label: item.cuid}} />
+                    <ActionsComponent actions={['remove']} data={{model: 'save', id: item.id, key: item.cuid, object: item.object, type: item.type, label: item.cuid}} />
                 </div>
               </ListItem>
             )) ?? null}
