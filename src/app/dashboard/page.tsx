@@ -63,7 +63,7 @@ export default async function DashboardPage() {
                     </CardTitle>
                   </div>
                   <div className="flex-none justify-end">
-                    <ActionsComponent actions={['save', 'favorite', 'like', 'dislike', 'archive', 'share']} data={{id: item.id, key: item.uuid, type: 'mockup', object: item.name, label: item.name}} />
+                    <ActionsComponent actions={['save', 'favorite', 'like', 'dislike', 'archive', 'share']} data={{model: 'mockup', id: item.id, key: item.uuid, type: 'mockup', object: item.name, label: item.name}} />
                   </div>
                 </div>
               </CardHeader>
