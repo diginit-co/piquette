@@ -2,7 +2,7 @@
 import { api } from "~/trpc/react";
 import React from "react";
 import moment from 'moment'
-
+import Link from "next/link";
 
 import { AlertComponent, ActionsComponent } from "~/components/common";
 import { ListContainer, ListItem } from "~/components/templates/list";
@@ -59,10 +59,10 @@ export function AllFavorites({ userId}: AllFavoritesProps) {
             <div className="min-w-0 px-5">
               <div className="flex items-start gap-x-3">
                 <p className="text-sm font-semibold leading-6 text-gray-900">{item.object}</p>
-                <p
-                  className="mt-0.5 whitespace-nowrap rounded-md px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset"
-                >
-                  {item.type}
+                <p className="mt-0.5 whitespace-nowrap rounded-md px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset">
+                  <Link href={`/dashboard/favorites/${item.cuid}`}>
+                    {item.type}
+                  </Link>
                 </p>
               </div>
               <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
@@ -101,7 +101,11 @@ export function AllFavorites({ userId}: AllFavoritesProps) {
               <ListItem key={item.id}>
                 <div className="min-w-0 px-5">
                   <div className="flex items-start gap-x-3">
-                    <p className="text-sm font-semibold leading-6 text-gray-900">{item.object}</p>
+                    <p className="text-sm font-semibold leading-6 text-gray-900">
+                      <Link href={`/dashboard/favorites/${item.cuid}`}>
+                        {item.object}
+                      </Link>
+                    </p>
                   </div>
                   <div className="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
                       <p className="whitespace-nowrap">
