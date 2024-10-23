@@ -1,4 +1,5 @@
-import { eq, and} from "drizzle-orm";
+import { eq, and, desc} from "drizzle-orm";
+import  jwt from "jsonwebtoken";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
@@ -17,15 +18,36 @@ export const saveRouter = createTRPCRouter({
     .input(z.object({ 
       type: z.string().min(1),
       object: z.string(),
-      createdBy: z.string(),
-      updatedBy: z.string().min(1)
     }))
     .mutation(async ({ ctx, input }) => {
+
+      // Get the token from the headers
+      const authToken = ctx.headers.get('x-clerk-auth-token') as string | undefined;
+
+      if (!authToken) {
+        throw new Error("Unauthorized: Missing auth token");
+      }
+
+      // Decode the token to get the `sub` (userId)
+      let userId: string | null = null;
+      try {
+        const decodedToken = jwt.decode(authToken) as { sub: string } | null;
+
+    
+        if (!decodedToken?.sub) {
+          throw new Error("Unauthorized: Invalid token");
+        }
+
+        userId = decodedToken.sub;  
+      } catch (error: unknown) {
+        throw new Error(`Unauthorized: Error decoding token - ${(error as Error).message}`);
+      }
+
       await ctx.db.insert(saves).values({
         type: input.type,
         object: input.object,
-        createdBy: input.createdBy,
-        updatedBy: input.updatedBy,
+        createdBy: userId,
+        updatedBy: userId,
       });
     }),
 
@@ -62,12 +84,49 @@ export const saveRouter = createTRPCRouter({
       });
     }),
 
+  getByUser: publicProcedure
+    .input(z.object({
+      createdBy: z.string().min(1)
+    }))
+
+    
+    .query(async ({ ctx, input }) => {
+
+      // Get the token from the headers
+      const authToken = ctx.headers.get('x-clerk-auth-token') as string | undefined;
+
+      if (!authToken) {
+        throw new Error("Unauthorized: Missing auth token");
+      }
+
+      // Decode the token to get the `sub` (userId)
+      let userId: string | null = null;
+      try {
+        const decodedToken = jwt.decode(authToken) as { sub: string } | null;
+
+        if (!decodedToken?.sub) {
+          throw new Error("Unauthorized: Invalid token");
+        }
+
+        userId = decodedToken.sub;  
+      } catch (error: unknown) {
+        throw new Error(`Unauthorized: Error decoding token - ${(error as Error).message}`);
+      }
+
+      const savesList = await ctx.db.select()
+        .from(saves)
+        .where(eq(saves.createdBy, input.createdBy))  // Corrected where clause
+        .orderBy(saves.createdAt, desc(saves.createdAt))
+
+      return savesList ?? [];
+    }),
+
   getAll: publicProcedure.query(async ({ ctx }) => {
-    const favorite = await ctx.db.query.saves.findMany({
+    const savesList = await ctx.db.query.saves.findMany({
       orderBy: (saves, { desc }) => [desc(saves.createdAt)],
     });
 
-    return favorite ?? null;
+    return savesList ?? null;
     }),
 
 });

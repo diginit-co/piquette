@@ -26,8 +26,10 @@ interface Favorite {
   archivedBy: string | null;
 }
 
-export function AllSaved({  }: AllSavedProps) {
-  const [AllSaved] = api.save.getAll.useSuspenseQuery();
+export function AllSaved({userId}: AllSavedProps) {
+  const [AllSaved] = api.save.getByUser.useSuspenseQuery(
+    { createdBy: userId }
+  );
   
 
   if (!AllSaved || AllSaved.length === 0) {

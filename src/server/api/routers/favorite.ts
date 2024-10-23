@@ -1,5 +1,4 @@
 import { eq, and, desc } from "drizzle-orm";
-import { PgColumn } from "drizzle-orm/pg-core";
 import  jwt from "jsonwebtoken";
 import { z } from "zod";
 
