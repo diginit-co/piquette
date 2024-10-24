@@ -15,7 +15,7 @@ export const appRouter = createTRPCRouter({
   rest: restRouter,
   favorite: favoriteRouter,
   like: likeRouter,
-  dislikeRouter: dislikeRouter,
+  dislike: dislikeRouter,
   save: saveRouter,
   post: postRouter,
 });

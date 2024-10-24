@@ -359,6 +359,76 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
      * 
      */
 
+    const removeDisikeMutation = api.dislike.delete.useMutation();
+    const addDislikeMutation = api.dislike.add.useMutation();
+
+    const handleAddDislike = async (currentType: string, currentObject: string) => {
+        try {
+            await addDislike({
+                type: currentType,
+                object: currentObject,
+                createdBy: "Brooke",
+                updatedBy: "Brooke"
+            });
+            toast({
+                variant: "default",
+                title: `Successfully added ${currentObject} to your disliked objects`,
+            });
+            setOpenDialog(false);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Error during removal:", error.message);
+            } else {
+                console.error("Unexpected error during removal:", error);
+            }
+        }
+    };
+
+    const removeDislike = async (params: { id: number; key: string; type: string; object: string }) => {
+        try {
+            await removeDisikeMutation.mutateAsync(params);
+            console.log("Dislike removed successfully");
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Error removing save:", error.message);
+            } else {
+                console.error("Unexpected error:", error);
+            }
+        }
+    };
+
+    const addDislike = async (params: { type: string; object: string; createdBy: string; updatedBy: string; }) => {
+        try {
+            await addDislikeMutation.mutateAsync(params);
+            console.log("Dislike added successfully");
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Error adding like:", error.message);
+            } else {
+                console.error("Unexpected error:", error);
+            }
+        }
+    };
+
+    const handleRemoveDislike = async () => {
+        try {
+            await removeDislike({ id: currentId!, key: currentKey!, type: currentType!, object: currentObject! });
+            setOpenDialog(false);
+
+            toast({
+                variant: "default",
+                title: `Successfully removed ${currentObject}`,
+            });
+            
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Error during removal:", error.message);
+            } else {
+                console.error("Unexpected error during removal:", error);
+            }
+        }
+    };
+
     /** Archived
      * 
      */
@@ -388,6 +458,8 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
                 void handleAddSave(data.type, data.object); // Explicitly ignore promise
             } else if (action === 'like') {
                 void handleAddLike(data.type, data.object); // Explicitly ignore promise
+            } else if (action === 'dislike') {
+                void handleAddDislike(data.type, data.object); // Explicitly ignore promise
             } else if (action === 'share') {
                 console.log('Share');
             }
@@ -419,7 +491,7 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
                                     // setOpenDialog(false);
                                 }}
                             >Remove</Button>
-                            : currentModel === "like" ?
+                        : currentModel === "like" ?
                             <Button
                                 variant="destructive"
                                 onClick={async () => {
@@ -427,7 +499,15 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
                                     // setOpenDialog(false);
                                 }}
                             >Remove</Button>
-                            :
+                        : currentModel === "dislike" ?
+                            <Button
+                                variant="destructive"
+                                onClick={async () => {
+                                    await handleRemoveDislike();
+                                    // setOpenDialog(false);
+                                }}
+                            >Remove</Button>
+                        :
                             <Button
                                 variant="destructive"
                                 onClick={async () => {
