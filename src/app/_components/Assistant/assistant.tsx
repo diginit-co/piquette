@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import OpenAI from "openai";
 import { nanoid } from "nanoid";
+import ReactMarkdown from "react-markdown"; 
 
 import { Button } from "~/components/ui/button";
 import { Textarea } from "~/components/ui/textarea";
@@ -57,50 +58,48 @@ export default function AssistantComponent() {
   // Function to handle sending user input
   const handleSubmit = async () => {
     if (!message || !assistantId || !threadId) return;
-
+  
     // Add the user's message to the chat
     const userMessage: Message = { id: nanoid(), message, role: "user" };
-    setMessages([...messages, userMessage]);
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
     setMessage("");
     setLoading(true);
-
-    // Clear the current assistant message (since we'll build it as we stream the response)
-    setCurrentAssistantMessage("");
-
+  
     try {
       // Step 3: Add a Message to the Thread
       await openai.beta.threads.messages.create(threadId, {
         role: "user",
         content: message,
       });
-
+  
       // Step 4: Create a Run (generate assistant's response)
-      const run = openai.beta.threads.runs.stream(threadId, {
+      const assistantMessage: Message = { id: nanoid(), message: "", role: "assistant" };
+      setMessages((prevMessages) => [...prevMessages, assistantMessage]);
+  
+      openai.beta.threads.runs.stream(threadId, {
         assistant_id: assistantId,
       })
-        .on("textCreated", () => {
-          const assistantMessage: Message = { id: nanoid(), message: "", role: "assistant" };
-          setMessages((prevMessages) => [...prevMessages, assistantMessage]);
-        })
         .on("textDelta", (textDelta) => {
-            // Append incoming text to the current assistant message
-            setCurrentAssistantMessage((prev) => prev + textDelta.value); // Use callback function to get the previous state value
-          
-            // Update the most recent assistant message in the messages array
-            setMessages((prevMessages) => {
-              const updatedMessages = [...prevMessages];
-              updatedMessages[updatedMessages.length - 1].message += textDelta.value; // Append the new text chunk
-              return updatedMessages;
-            });
+          // Update the most recent assistant message in the messages array
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages];
+            const lastMessage = updatedMessages[updatedMessages.length - 1];
+            if (lastMessage) {
+              lastMessage.message += textDelta.value; // Append the new text chunk
+            }
+            return updatedMessages;
           });
+        })
+        .on("end", () => {
+          setLoading(false); // Set loading to false once the response is complete
+        });
     } catch (error) {
       console.error("Error during conversation:", error);
       setMessages((prevMessages) => [
         ...prevMessages,
         { id: nanoid(), role: "assistant", message: "Error: Could not fetch response." },
       ]);
-    } finally {
-      setLoading(false);
+      setLoading(false); // Ensure loading is set to false on error
     }
   };
 
@@ -113,7 +112,7 @@ export default function AssistantComponent() {
             <span className={msg.role === "assistant" ? "text-blue-500" : "text-black"}>
               {msg.role === "assistant" ? "AI: " : "You: "}
             </span>
-            {msg.message}
+            <ReactMarkdown>{msg.message}</ReactMarkdown>
           </p>
         ))}
       </div>
