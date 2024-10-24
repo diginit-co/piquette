@@ -278,7 +278,82 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
 
     /** Liked 
      * 
+     * removeLikeMutation: A mutation to remove a like from the database.
+     * removeLike: A function to remove a like from the database.
+     * handleRemoveLike: A function to handle the removal of a like from the database.
+     * handleAddLike: A function to handle the addition of a like to the database.
+     * addLike: A function to add an object to your likes collection
+     * 
      */
+    const removeLikeMutation = api.like.delete.useMutation();
+    const addLikeMutation = api.like.add.useMutation();
+
+    const handleAddLike = async (currentType: string, currentObject: string) => {
+        try {
+            await addLike({
+                type: currentType,
+                object: currentObject,
+                createdBy: "Brooke",
+                updatedBy: "Brooke"
+            });
+            toast({
+                variant: "default",
+                title: `Successfully added ${currentObject} to your liked objects`,
+            });
+            setOpenDialog(false);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Error during removal:", error.message);
+            } else {
+                console.error("Unexpected error during removal:", error);
+            }
+        }
+    };
+
+    const removeLike = async (params: { id: number; key: string; type: string; object: string }) => {
+        try {
+            await removeLikeMutation.mutateAsync(params);
+            console.log("Like removed successfully");
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Error removing save:", error.message);
+            } else {
+                console.error("Unexpected error:", error);
+            }
+        }
+    };
+
+    const addLike = async (params: { type: string; object: string; createdBy: string; updatedBy: string; }) => {
+        try {
+            await addLikeMutation.mutateAsync(params);
+            console.log("Like added successfully");
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Error adding like:", error.message);
+            } else {
+                console.error("Unexpected error:", error);
+            }
+        }
+    };
+
+    const handleRemoveLike = async () => {
+        try {
+            await removeLike({ id: currentId!, key: currentKey!, type: currentType!, object: currentObject! });
+            setOpenDialog(false);
+
+            toast({
+                variant: "default",
+                title: `Successfully removed ${currentObject}`,
+            });
+            
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Error during removal:", error.message);
+            } else {
+                console.error("Unexpected error during removal:", error);
+            }
+        }
+    };
 
     /** Disliked
      * 
@@ -311,6 +386,8 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
                 void handleAddFavorite(data.type, data.object); // Explicitly ignore promise
             } else if (action === 'save') {
                 void handleAddSave(data.type, data.object); // Explicitly ignore promise
+            } else if (action === 'like') {
+                void handleAddLike(data.type, data.object); // Explicitly ignore promise
             } else if (action === 'share') {
                 console.log('Share');
             }
@@ -332,12 +409,21 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
             case 'remove':
                 return (
                     <DialogFooter>
+                        
                         <Button variant="ghost" onClick={() => setOpenDialog(false)}>Cancel</Button>
                         { currentModel === "favorite" ? 
                             <Button
                                 variant="destructive"
                                 onClick={async () => {
                                     await handleRemoveFavorite();
+                                    // setOpenDialog(false);
+                                }}
+                            >Remove</Button>
+                            : currentModel === "like" ?
+                            <Button
+                                variant="destructive"
+                                onClick={async () => {
+                                    await handleRemoveLike();
                                     // setOpenDialog(false);
                                 }}
                             >Remove</Button>
