@@ -1,4 +1,4 @@
-import { ArchiveBoxXMarkIcon, StarIcon, ShareIcon, HomeIcon, HandThumbUpIcon, HandThumbDownIcon, FolderIcon } from '@heroicons/react/24/outline'
+import { ArchiveBoxXMarkIcon, StarIcon, ShareIcon, HomeIcon, HandThumbUpIcon, HandThumbDownIcon, FolderIcon, SparklesIcon as ChatIcon } from '@heroicons/react/24/outline'
 
 export const piquetteConfig = {
     meta: {
@@ -72,6 +72,7 @@ export const piquetteConfig = {
             {id: 'mockup', label: 'Mockup', href: '/dashboard', icon: HomeIcon},
             {id: 'form', label: 'Form Example', href: '/dashboard/-example', icon: HomeIcon},
             {id: 'wizzard', label: 'Wizard WIP', href: '/dashboard/-example2', icon: HomeIcon},
+            {id: 'assistant', label: 'Assistant', href: '/dashboard/assistant', icon: ChatIcon},
         ],
         services: [
             {id: 'favorites', label: 'Favorites', href: '/dashboard/services/favorites', icon: StarIcon},
