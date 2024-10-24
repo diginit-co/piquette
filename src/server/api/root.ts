@@ -2,6 +2,7 @@ import { postRouter } from "~/server/api/routers/post";
 import { favoriteRouter } from "~/server/api/routers/favorite";
 import { saveRouter } from "~/server/api/routers/save";
 import { likeRouter } from "~/server/api/routers/like";
+import { dislikeRouter } from "~/server/api/routers/dislike";
 import { restRouter } from "~/server/api/routers/rest";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
@@ -14,6 +15,7 @@ export const appRouter = createTRPCRouter({
   rest: restRouter,
   favorite: favoriteRouter,
   like: likeRouter,
+  dislikeRouter: dislikeRouter,
   save: saveRouter,
   post: postRouter,
 });
