@@ -140,3 +140,23 @@ export const shares = createTable(
     archivedBy: varchar("archived_by", { length: 256 }),
   },
 );
+
+export const archives = createTable(
+  "archive",
+  {
+    id: serial("id").primaryKey(),
+    cuid: varchar("cuid", { length: 256 }).default(createId()).notNull(),
+    object: varchar("object", { length: 256 }).notNull(),
+    type: varchar("type", { length: 256 }).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    createdBy: varchar("created_by", { length: 256 }).notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+      () => new Date()
+    ),
+    updatedBy: varchar("updated_by", { length: 256 }).notNull(),
+    archivedAt: timestamp("archived_at", { withTimezone: true }),
+    archivedBy: varchar("archived_by", { length: 256 }),
+  },
+);

@@ -433,6 +433,75 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
      * 
      */
 
+    const removeArchiveMutation = api.archive.delete.useMutation();
+    const addArchiveMutation = api.archive.add.useMutation();
+
+    const handleAddArchive = async (currentType: string, currentObject: string) => {
+        try {
+            await addArchive({
+                type: currentType,
+                object: currentObject,
+                createdBy: "Brooke",
+                updatedBy: "Brooke"
+            });
+            toast({
+                variant: "default",
+                title: `Successfully added ${currentObject} to your archived objects`,
+            });
+            setOpenDialog(false);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Error during removal:", error.message);
+            } else {
+                console.error("Unexpected error during removal:", error);
+            }
+        }
+    };
+
+    const removeArchive = async (params: { id: number; key: string; type: string; object: string }) => {
+        try {
+            await removeArchiveMutation.mutateAsync(params);
+            console.log("Archived object removed successfully");
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Error removing save:", error.message);
+            } else {
+                console.error("Unexpected error:", error);
+            }
+        }
+    };
+
+    const addArchive = async (params: { type: string; object: string; createdBy: string; updatedBy: string; }) => {
+        try {
+            await addArchiveMutation.mutateAsync(params);
+            console.log("Archive added successfully");
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Error adding like:", error.message);
+            } else {
+                console.error("Unexpected error:", error);
+            }
+        }
+    };
+
+    const handleRemoveArchive = async () => {
+        try {
+            await removeArchive({ id: currentId!, key: currentKey!, type: currentType!, object: currentObject! });
+            setOpenDialog(false);
+
+            toast({
+                variant: "default",
+                title: `Successfully removed ${currentObject}`,
+            });
+            
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Error during removal:", error.message);
+            } else {
+                console.error("Unexpected error during removal:", error);
+            }
+        }
+    };
     /** Shared
      * 
      */
@@ -448,18 +517,20 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
         setCurrentObject(data.object);
 
 
-        if (action === 'remove' || action === 'share' || action === 'archive') {
+        if (action === 'remove' || action === 'share') {
             setOpenDialog(true);
         } else {
             setOpenDialog(false);
             if (action === 'favorite') {
-                void handleAddFavorite(data.type, data.object); // Explicitly ignore promise
+                void handleAddFavorite(data.type, data.object);
             } else if (action === 'save') {
-                void handleAddSave(data.type, data.object); // Explicitly ignore promise
+                void handleAddSave(data.type, data.object);
             } else if (action === 'like') {
-                void handleAddLike(data.type, data.object); // Explicitly ignore promise
+                void handleAddLike(data.type, data.object);
+            } else if (action === 'archive') {
+                void handleAddArchive(data.type, data.object);
             } else if (action === 'dislike') {
-                void handleAddDislike(data.type, data.object); // Explicitly ignore promise
+                void handleAddDislike(data.type, data.object);
             } else if (action === 'share') {
                 console.log('Share');
             }
@@ -504,6 +575,14 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
                                 variant="destructive"
                                 onClick={async () => {
                                     await handleRemoveDislike();
+                                    // setOpenDialog(false);
+                                }}
+                            >Remove</Button>
+                        : currentModel === "archive" ?
+                            <Button
+                                variant="destructive"
+                                onClick={async () => {
+                                    await handleRemoveArchive();
                                     // setOpenDialog(false);
                                 }}
                             >Remove</Button>

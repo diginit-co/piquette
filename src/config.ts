@@ -69,9 +69,9 @@ export const piquetteConfig = {
     },
     app: {
         features: [
-            {id: 'dashboard', label: 'Dashboard', href: '/dashboard', icon: HomeIcon},
-            {id: 'dashboard', label: 'Form Example', href: '/dashboard/-example', icon: HomeIcon},
-            {id: 'dashboard', label: 'Wizard WIP', href: '/dashboard/-example2', icon: HomeIcon},
+            {id: 'mockup', label: 'Mockup', href: '/dashboard', icon: HomeIcon},
+            {id: 'form', label: 'Form Example', href: '/dashboard/-example', icon: HomeIcon},
+            {id: 'wizzard', label: 'Wizard WIP', href: '/dashboard/-example2', icon: HomeIcon},
         ],
         services: [
             {id: 'favorites', label: 'Favorites', href: '/dashboard/services/favorites', icon: StarIcon},
