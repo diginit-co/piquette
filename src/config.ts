@@ -74,12 +74,12 @@ export const piquetteConfig = {
             {id: 'dashboard', label: 'Wizard WIP', href: '/dashboard/-example2', icon: HomeIcon},
         ],
         services: [
-            {id: 'favorites', label: 'Favorites', href: '/dashboard/favorites', icon: StarIcon},
-            {id: 'saved', label: 'Saved', href: '/dashboard/saved', icon: FolderIcon},
-            {id: 'likes', label: 'Liked', href: '/dashboard/liked', icon: HandThumbUpIcon},
-            {id: 'dislikes', label: 'Disliked', href: '/dashboard/disliked', icon: HandThumbDownIcon},
-            {id: 'archive', label: 'Archived', href: '/dashboard/archived', icon: ArchiveBoxXMarkIcon},
-            {id: 'shared', label: 'Shared', href: '/dashboard/shared', icon: ShareIcon},
+            {id: 'favorites', label: 'Favorites', href: '/dashboard/services/favorites', icon: StarIcon},
+            {id: 'saved', label: 'Saved', href: '/dashboard/services/saved', icon: FolderIcon},
+            {id: 'likes', label: 'Liked', href: '/dashboard/services/liked', icon: HandThumbUpIcon},
+            {id: 'dislikes', label: 'Disliked', href: '/dashboard/services/disliked', icon: HandThumbDownIcon},
+            {id: 'archive', label: 'Archived', href: '/dashboard/services/archived', icon: ArchiveBoxXMarkIcon},
+            {id: 'shared', label: 'Shared', href: '/dashboard/services/shared', icon: ShareIcon},
         ],
     }
 }

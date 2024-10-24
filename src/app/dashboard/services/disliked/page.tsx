@@ -12,7 +12,7 @@ import {
 } from "~/components/ui/dialog"
 import { Button } from "~/components/ui/button"
 
-import { AllDisliked  } from "~/app/_components/Disliked";
+import { AllDisliked  } from "~/app/_components/services/Disliked";
 
 import { type Metadata } from "next";
 

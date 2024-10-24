@@ -1,5 +1,5 @@
 import {TableComponent} from "~/components/common";
-import { exampleConfig } from '~/app/_components/Example/example.config';
+import { exampleConfig } from '~/app/_components/services/Example/example.config';
 
 const data: Payment[] = [
     {

@@ -12,7 +12,7 @@ import {
 } from "~/components/ui/dialog"
 import { Button } from "~/components/ui/button"
 
-import { AllFavorites, FavoriteForm } from "~/app/_components/Favorites";
+import { AllFavorites, FavoriteForm } from "~/app/_components/services/Favorites";
 
 import { type Metadata } from "next";
 
@@ -34,7 +34,7 @@ export default async function Home() {
     <Column>
       <HeaderComponent
         title="Archives"
-        description="Archived Favorites"
+        description="Archived objects"
       />
       <AllFavorites userId={user.id} />
       

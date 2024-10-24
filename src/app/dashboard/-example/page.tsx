@@ -2,7 +2,7 @@ import { type Metadata } from "next";
 
 import { HeaderComponent } from '~/components/common';
 import Column from '~/components/templates/column';
-import { ExampleIndex } from '~/app/_components/Example';
+import { ExampleIndex } from '~/app/_components/services/Example';
 
 export const metadata: Metadata = {
   title: `Examples | Piquette`,
