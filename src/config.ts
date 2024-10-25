@@ -81,7 +81,7 @@ export const piquetteConfig = {
         features: [
             {id: 'mockup', label: 'Mockup', href: '/dashboard', icon: HomeIcon},
             {id: 'organization', label: 'Organization', href: '/dashboard/organization', icon: OrganizationIcon},
-            {id: 'assistant', label: 'Assistant', href: '/dashboard/assistant', icon: ChatIcon},
+            // {id: 'assistant', label: 'Assistant', href: '/dashboard/assistant', icon: ChatIcon},
         ],
         services: [
             {id: 'favorites', label: 'Favorites', href: '/dashboard/services/favorites', icon: StarIcon},
