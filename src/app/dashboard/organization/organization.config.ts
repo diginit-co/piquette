@@ -60,9 +60,6 @@ const organizationForm: FormDefinition = {
   buttons: [
     { label: "Save", type: "submit", variant: "default" }
   ],
-  forEach: function (arg0: (field: { required: any; name: string | number; }) => void): unknown {
-    throw new Error("Function not implemented.");
-  }
 }
 
 /**
