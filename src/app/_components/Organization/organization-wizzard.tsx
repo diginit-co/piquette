@@ -3,7 +3,7 @@
 // import { useState } from "react";
 import { toast } from "~/hooks/use-toast"
 
-import { organizationConfig } from "./organization.config";
+import { organizationConfig } from "../../dashboard/organization/organization.config";
 import { WizzardComponent } from "~/components/common"; 
 
 

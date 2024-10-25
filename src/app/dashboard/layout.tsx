@@ -8,7 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
 
-import { AccountDropdownComponent, ChatComponent, ProfileComponent, NotificationsComponent } from "~/components/common";
+import { AccountDropdownComponent, ProfileComponent, NotificationsComponent } from "~/components/common";
 import {
   Dialog,
   DialogBackdrop,
@@ -234,7 +234,7 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
               <div className="relative flex flex-1"/> {/** Temporary Spacer */}
               <div className="flex items-center gap-x-4 lg:gap-x-4">
 
-                <ChatComponent />
+                {/* <ChatComponent /> */}
 
                 <ProfileComponent />
 
