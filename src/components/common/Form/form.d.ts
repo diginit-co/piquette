@@ -7,11 +7,13 @@ export default interface FormDefinition {
 
 export interface Field {
     label: string
-    type: "text" | "email" | "tel" | "textarea" | "select" | "radio" | "checkbox"
+    type: "text" | "email" | "tel" | "textarea" | "select" | "radio" | "checkbox" | "switch"
     name: string
     placeholder?: string
+    description?: string
     required?: boolean
-    options?: string[]
+    options?: Option[]
+    autocomplete?: Autocomplete
 }
 
 
@@ -20,3 +22,14 @@ export interface Button {
     type: "submit" | "reset"
     variant: "default" | "ghost" | "destructive"
 }
+
+type Option = {
+    label: string
+    value: string
+}
+
+type Autocomplete = {
+    type: "openai"
+    mode: "prompt" | "complete"
+}
+
