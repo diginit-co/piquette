@@ -16,7 +16,7 @@ export async function generateAutocompleteContent(fields: Record<string, string>
     });
 
     // Return the generated content
-    return response.choices[0]?.message?.content || "";
+    return response.choices[0]?.message?.content ?? "";
   } catch (error) {
     console.error("Error generating autocomplete content:", error);
     throw new Error("Autocomplete generation failed");

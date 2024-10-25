@@ -19,7 +19,7 @@
 "use client";
 
 import { useState } from "react";
-import { Updater, useForm } from "@tanstack/react-form";
+import { type Updater, useForm } from "@tanstack/react-form";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
@@ -84,51 +84,53 @@ export default function FormComponent({ onSubmit, formConfig }: FormComponentPro
     },
   });
 
-  const handleAutocomplete = async (fieldName: string, prompt: string) => {
-    setIsLoading(true);
-    const formValues = stateValue;
+  // Define a type for the API response
+interface AutocompleteResponse {
+  content: string;
+}
+
+// Change the type assertion in the handleAutocomplete function
+const handleAutocomplete = async (fieldName: string, prompt: string) => {
+  setIsLoading(true);
+  const formValues = stateValue;
+
+  try {
+    const response = await fetch("/api/openai/autocomplete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        prompt, 
+        fields: JSON.stringify(formValues) // Send prompt and stringified JSON object
+      }),
+    });
+
+    const data: AutocompleteResponse = await response.json(); // specify the type here
+    setIsLoading(false);
+    if (data.content) {
+      setStateValue((prev) => ({
+        ...prev,
+        [fieldName]: data.content
+      }));
+      form.setFieldValue(fieldName, data.content);
+    }
+  } catch (error) {
+    console.error("Failed to autocomplete:", error);
+  }
+};
+
+// Update the handleFieldChange function signature
+const handleFieldChange = (name: string, value: string | Updater<string | never[]>) => { // Add string type to value
+  setStateValue((prev) => ({ ...prev, [name]: value }));
   
-    try {
-      const response = await fetch("/api/openai/autocomplete", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          prompt, 
-          fields: JSON.stringify(formValues) // Send prompt and stringified JSON object
-        }),
-      });
-      
-      const data = await response.json();
-      setIsLoading(false);
-      if (data.content) {
-        // Update the specific field with the generated content
-        setStateValue((prev) => ({
-          ...prev,
-          [fieldName]: data.content
-        }));
-        form.setFieldValue(fieldName, data.content); // Changed from setValue to setFieldValue
-      }
-    } catch (error) {
-      console.error("Failed to autocomplete:", error);
-    }
-  };
-
-  // const handleFieldChange = (name: string, value: unknown) => {
-  //   setStateValue((prev) => ({ ...prev, [name]: value }));
-  // };
-
-  const handleFieldChange = (name: string, value: Updater<string | never[]>) => {
-    setStateValue((prev) => ({ ...prev, [name]: value }));
-    
-    form.setFieldValue(name, value);
-    // Clear error if value is provided
-    if (errors[name] && value !== "") {
-      setErrors((prev) => {
-        const { [name]: _, ...rest } = prev;
-        return rest;
-      });
-    }
-  };
+  form.setFieldValue(name, value);
+  // Clear error if value is provided
+  if (errors[name] && value !== "") {
+    setErrors((prev) => {
+      const { [name]: errorToRemove, ...rest } = prev;
+      return rest;
+    });
+  }
+};
 
   return (
     <form
