@@ -1,3 +1,4 @@
+import { Label } from "@headlessui/react";
 import {
     type FormDefinition,
     type TableDefinition
@@ -28,13 +29,21 @@ const tableStructure: TableDefinition = {
  * Form Structure
  */
 const organizationForm: FormDefinition = {
-  headline: "New Organization",
-  description: "Create a new organization",
+  
   fields: [
     [
-      { label: "Name", type: "text", name: "name", required: true },
-      { label: "Location", type: "text", name: "location", required: true },
+      { label: "Name", type: "text", name: "name", required: true, placeholder: "Enter the name of your organization" },
+      { label: "Location", type: "text", name: "location", required: true, placeholder: "City & State" },
       { label: "Website", type: "text", name: "url", required: true },
+    ],
+    [
+      { label: "Industry", type: "select", name: "industry", required: true, options: [
+        {label: "Retail", value: "retail"},
+        {label: "Hospitality", value: "hospitality"},
+        {label: "Health Care" , value: "healthcare"},
+      ],
+
+      },
     ],
     [
       {
@@ -48,7 +57,7 @@ const organizationForm: FormDefinition = {
     ]
   ],
   buttons: [
-    { label: "Submit", type: "submit", variant: "default" }
+    { label: "Save", type: "submit", variant: "default" }
   ]
 }
 

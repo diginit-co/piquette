@@ -145,6 +145,7 @@ export default function FormComponent({ onSubmit, formConfig }: FormComponentPro
                             {(field) => (
                               <Input
                                 value={field.state.value}
+                                placeholder={col.placeholder ?? ""}
                                 onBlur={(e) =>
                                   handleFieldChange(col.name, e.target.value)
                                 }
@@ -198,33 +199,35 @@ export default function FormComponent({ onSubmit, formConfig }: FormComponentPro
                         );
                       case "select":
                         return (
-                          <form.Field name={col.name}>
-                            {(field) => (
-                              <Select
-                                value={
-                                  Array.isArray(field.state.value)
-                                    ? field.state.value.join("")
-                                    : field.state.value
-                                }
-                                onValueChange={(value) =>
-                                  field.handleChange(value)
-                                }
-                              >
-                                <SelectTrigger className="w-[180px]">
-                                  <SelectValue placeholder={col.placeholder} />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectGroup>
-                                    {col.options?.map((option, idx) => (
-                                      <SelectItem key={idx} value={option.value}>
-                                        {option.label}
-                                      </SelectItem>
-                                    ))}
-                                  </SelectGroup>
-                                </SelectContent>
-                              </Select>
-                            )}
-                          </form.Field>
+                          <div className="">
+                            <form.Field name={col.name}>
+                              {(field) => (
+                                <Select
+                                  value={
+                                    Array.isArray(field.state.value)
+                                      ? field.state.value.join("")
+                                      : field.state.value
+                                  }
+                                  onValueChange={(value) =>
+                                    field.handleChange(value)
+                                  }
+                                >
+                                  <SelectTrigger className="">
+                                    <SelectValue placeholder={col.placeholder} />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectGroup>
+                                      {col.options?.map((option, idx) => (
+                                        <SelectItem key={idx} value={option.value}>
+                                          {option.label}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectGroup>
+                                  </SelectContent>
+                                </Select>
+                              )}
+                            </form.Field>
+                          </div>
                         );
                       default:
                         return <>Unknown</>;

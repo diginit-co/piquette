@@ -1,6 +1,6 @@
 export default interface FormDefinition {
-    headline: string
-    description: string
+    headline?: string
+    description?: string
     fields: Field[][]
     buttons: Button[]
 }
