@@ -1,14 +1,24 @@
-import { NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server"; // Change here for type import
+import { NextResponse } from "next/server";
 import { generateAutocompleteContent } from "~/server/services/openai/autocomplete";
+
+// Define the types for the expected request body
+interface RequestBody {
+  prompt: string;
+  fields: Record<string, string>;
+}
 
 // Define the POST method handler explicitly
 export async function POST(req: NextRequest) {
   try {
-    const { prompt, fields } = await req.json();
+    const body: RequestBody = await req.json();
+
+    const { prompt, fields } = body;
 
     if (!prompt || !fields) {
       return NextResponse.json({ error: "Prompt and JSON data are required" }, { status: 400 });
     }
+    
     const content = await generateAutocompleteContent(fields, prompt);
 
     return NextResponse.json({ content }, { status: 200 });
