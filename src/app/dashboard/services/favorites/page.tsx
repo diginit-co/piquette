@@ -1,6 +1,6 @@
 import { currentUser } from '@clerk/nextjs/server'
 
-import { AllFavorites, FavoriteForm } from "~/app/_components/services/Favorites";
+import { AllFavorites } from "~/app/_components/services/Favorites";
 
 import { type Metadata } from "next";
 
@@ -23,9 +23,7 @@ export default async function Home() {
       <HeaderComponent
         title="Favorites"
         description="A collection of your favorite objects"
-        actions={[
-          {label: "New Favorite", type: "dialog", Form: <FavoriteForm userId={user.id} />},
-        ]}
+        
       />
       <AllFavorites userId={user.id} />
       
