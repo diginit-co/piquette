@@ -11,7 +11,7 @@ interface RequestBody {
 // Define the POST method handler explicitly
 export async function POST(req: NextRequest) {
   try {
-    const body: RequestBody = await req.json();
+    const body: RequestBody = await req.json() as RequestBody;
 
     const { prompt, fields } = body;
 
@@ -19,7 +19,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Prompt and JSON data are required" }, { status: 400 });
     }
     
-    const content = await generateAutocompleteContent(fields, prompt);
+    // Ensure generateAutocompleteContent returns the correct type
+    const content: string = await generateAutocompleteContent(fields, prompt);
 
     return NextResponse.json({ content }, { status: 200 });
   } catch (error) {

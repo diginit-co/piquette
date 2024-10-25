@@ -52,65 +52,69 @@ export default function AssistantComponent() {
     initializeThread();
   }, []);
 
-  // Function to handle sending user input
-  const handleSubmit = async () => {
-    if (!message || !threadId || !assistantExists) return;
-    
+  // Updated handleSubmit function
+const handleSubmit = async () => {
+  if (!message || !threadId || !assistantExists) return;
 
-    // Add the user's message to the chat
-    const label = message
+  const userMessage: Message = { id: nanoid(), message, role: "user" };
+  setMessages((prevMessages) => [...prevMessages, userMessage]);
+  setMessage("");
+  setLoading(true);
 
-    const userMessage: Message = { id: nanoid(), message, role: "user" };
-    setMessages((prevMessages) => [...prevMessages, userMessage]);
-    setMessage("");
-    setLoading(true);
+  const markdownPrompt = "\n\nPlease respond in structured Markdown formatting.";
+  const combinedMessage = message + markdownPrompt;
 
-    const markdownPrompt = "\n\nPlease respond in structured Markdown formatting.";
-    const combinedMessage = message + markdownPrompt; // Combine for API call
+  try {
+    // Step 3: Add a Message to the Thread
+    await openai.beta.threads.messages.create(threadId, {
+      role: "user",
+      content: combinedMessage,
+    });
 
-    try {
-        // Step 3: Add a Message to the Thread
-        await openai.beta.threads.messages.create(threadId, {
-            role: "user",
-            content: combinedMessage,
-        });
+    // Step 4: Create a Run (generate assistant's response)
+    const assistantMessage: Message = { id: nanoid(), message: "", role: "assistant" };
+    setMessages((prevMessages) => [...prevMessages, assistantMessage]);
 
-        // Step 4: Create a Run (generate assistant's response)
-        const assistantMessage: Message = { id: nanoid(), message: "", role: "assistant" };
-        setMessages((prevMessages) => [...prevMessages, assistantMessage]);
+    let fullResponseText = "";
 
-        let fullResponseText = ""; // Store the full response text
-
-        // Stream the assistant's response
-        openai.beta.threads.runs.stream(threadId, {
-            assistant_id: assistantId,
-        })
-            .on("textDelta", (textDelta) => {
-                // Append textDelta to fullResponseText
-                if (textDelta.value !== undefined && textDelta.value.trim()) { // Check for non-empty segments
-                    fullResponseText += textDelta.value; // Append to full response
-                    setMessages((prevMessages) => {
-                        const updatedMessages = [...prevMessages];
-                        const lastMessage = updatedMessages[updatedMessages.length - 1];
-                        if (lastMessage) {
-                            lastMessage.message = fullResponseText; // Update the most recent assistant message
-                        }
-                        return updatedMessages;
-                    });
-                }
-            })
-            .on("end", () => {
-                setLoading(false); // Set loading to false once the response is complete
+    // Stream the assistant's response
+    await new Promise<void>((resolve) => {
+      openai.beta.threads.runs.stream(threadId, {
+        assistant_id: assistantId,
+      })
+        .on("textDelta", (textDelta) => {
+          if (textDelta.value !== undefined && textDelta.value.trim()) {
+            fullResponseText += textDelta.value;
+            setMessages((prevMessages) => {
+              const updatedMessages = [...prevMessages];
+              const lastMessage = updatedMessages[updatedMessages.length - 1];
+              if (lastMessage) {
+                lastMessage.message = fullResponseText;
+              }
+              return updatedMessages;
             });
-    } catch (error) {
-        console.error("Error during conversation:", error);
-        setMessages((prevMessages) => [
-            ...prevMessages,
-            { id: nanoid(), role: "assistant", message: "Error: Could not fetch response." },
-        ]);
-        setLoading(false); // Ensure loading is set to false on error
-    }
+          }
+        })
+        .on("end", () => {
+          setLoading(false);
+          resolve(); // Resolve the promise when done
+        });
+    });
+  } catch (error) {
+    console.error("Error during conversation:", error);
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { id: nanoid(), role: "assistant", message: "Error: Could not fetch response." },
+    ]);
+    setLoading(false);
+  }
 };
+
+const updatedMessages = [...messages];
+const lastMessage = updatedMessages[updatedMessages.length - 1];
+if (lastMessage?.message !== undefined) {
+  lastMessage.message = ""; // Clear the message or assign a default value
+}
 
   return (
     <div className="flex flex-col h-screen">
