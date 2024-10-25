@@ -1,4 +1,3 @@
-import { postRouter } from "~/server/api/routers/post";
 import { favoriteRouter } from "~/server/api/routers/favorite";
 import { saveRouter } from "~/server/api/routers/save";
 import { likeRouter } from "~/server/api/routers/like";
@@ -19,7 +18,6 @@ export const appRouter = createTRPCRouter({
   dislike: dislikeRouter,
   archive: archiveRouter,
   save: saveRouter,
-  post: postRouter,
 });
 
 // export type definition of API
