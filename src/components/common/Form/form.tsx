@@ -56,7 +56,7 @@ export default function FormComponent({ onSubmit, formConfig }: FormComponentPro
         ])
       ),
     },
-    validators: formConfig.fields.flat().reduce((acc: Record<string, any>, field) => {
+    validators: formConfig.fields.flat().reduce((acc: Record<string, (value: string) => boolean>, field) => {
       if (field.required) {
         acc[field.name] = (value: string) => value.trim() !== "";
       }
@@ -104,7 +104,7 @@ const handleAutocomplete = async (fieldName: string, prompt: string) => {
       }),
     });
 
-    const data: AutocompleteResponse = await response.json(); // specify the type here
+    const data = await response.json() as AutocompleteResponse;
     setIsLoading(false);
     if (data.content) {
       setStateValue((prev) => ({
