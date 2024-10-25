@@ -32,9 +32,9 @@ const organizationForm: FormDefinition = {
   description: "Create a new organization",
   fields: [
     [
-      { label: "First Name", type: "text", name: "firstName", required: true },
-      { label: "Last Name", type: "text", name: "lastName", required: true },
-      { label: "Phone", type: "text", name: "phone", required: true },
+      { label: "Name", type: "text", name: "name", required: true },
+      { label: "Location", type: "text", name: "location", required: true },
+      { label: "Website", type: "text", name: "url", required: true },
     ],
     [
       { label: "Description", type: "textarea", name: "description", required: true, autocomplete: { type: "openai", mode: "complete" } },

@@ -66,10 +66,29 @@ export default function FormComponent({ onSubmit, formConfig }: FormComponentPro
     setStateValue((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAutocomplete = async (prompt: string) => {
-    // Display form values in an alert and populate the Textarea with form values
-    alert(JSON.stringify(stateValue, null, 2));
-    setStateValue((prev) => ({ ...prev, [prompt]: JSON.stringify(stateValue) }));
+  const handleAutocomplete = async (fieldName: string) => {
+    // Capture current stateValue from useState
+    const formValues = stateValue;
+  
+    try {
+      const response = await fetch("/api/openai/autocomplete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fields: formValues })
+      });
+      
+      const data = await response.json();
+      if (data.content) {
+        // Update the specific field with the generated content
+        setStateValue((prev) => ({
+          ...prev,
+          [fieldName]: data.content
+        }));
+        form.setFieldValue(fieldName, data.content); // Changed from setValue to setFieldValue
+      }
+    } catch (error) {
+      console.error("Failed to autocomplete:", error);
+    }
   };
 
   return (
@@ -138,19 +157,17 @@ export default function FormComponent({ onSubmit, formConfig }: FormComponentPro
                             <form.Field name={col.name}>
                               {(field) => (
                                 <Textarea
-                                  value={
-                                    Array.isArray(field.state.value)
-                                      ? field.state.value.join("")
-                                      : field.state.value
-                                  }
-                                  onBlur={(e) =>
-                                    handleFieldChange(col.name, e.target.value)
-                                  }
-                                  onChange={(e) =>
-                                    field.handleChange(e.target.value)
-                                  }
-                                  className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6 min-h-[125px]"
-                                />
+                                value={
+                                  stateValue[col.name] !== undefined
+                                    ? String(stateValue[col.name])
+                                    : Array.isArray(field.state.value)
+                                    ? field.state.value.join("")
+                                    : field.state.value
+                                }
+                                onBlur={(e) => handleFieldChange(col.name, e.target.value)}
+                                onChange={(e) => field.handleChange(e.target.value)}
+                                className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6 min-h-[125px]"
+                              />
                               )}
                             </form.Field>
                             {col.autocomplete && (
