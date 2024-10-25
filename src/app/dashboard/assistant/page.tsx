@@ -6,7 +6,7 @@ import { type Metadata } from "next";
 
 import { HeaderComponent } from '~/components/common';
 import Column from '~/components/templates/column';
-import { AssistantComponent } from '~/app/_components/Assistant';
+import AssistantComponent from './_components/assistant'
 
 
 export const metadata: Metadata = {

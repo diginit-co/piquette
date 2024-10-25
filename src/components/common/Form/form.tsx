@@ -19,7 +19,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "@tanstack/react-form";
+import { Updater, useForm } from "@tanstack/react-form";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
@@ -33,8 +33,6 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { SparklesIcon as ChatIcon } from "@heroicons/react/24/outline";
-import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
-import { Checkbox } from "~/components/ui/checkbox";
 import type { FormDefinition } from "~/components/common";
 
 interface FormComponentProps {
@@ -46,10 +44,11 @@ interface FormComponentProps {
 
 export default function FormComponent({ onSubmit, formConfig }: FormComponentProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [stateValue, setStateValue] = useState<Record<string, unknown>>({});
+
   const form = useForm({
     defaultValues: {
-      // Initialize with default values based on the formConfig
       ...Object.fromEntries(
         formConfig.fields.flat().map((field) => [
           field.name,
@@ -57,15 +56,33 @@ export default function FormComponent({ onSubmit, formConfig }: FormComponentPro
         ])
       ),
     },
+    validators: formConfig.fields.flat().reduce((acc: Record<string, any>, field) => {
+      if (field.required) {
+        acc[field.name] = (value: string) => value.trim() !== "";
+      }
+      return acc;
+    }, {}),
     onSubmit: async ({ value }) => {
+      const validationErrors: Record<string, string> = {};
+      
+      // Validate required fields
+      formConfig.fields.flat().forEach((field) => {
+        const fieldValue = value[field.name];
+        if (field.required && (typeof fieldValue === 'string' ? fieldValue.trim() === "" : true)) {
+          validationErrors[field.name] = `${field.label} is required`;
+        }
+      });
+
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        return; // Prevent submission
+      }
+
+      // If no errors, proceed to submit
+      setErrors({});
       onSubmit(value);
     },
   });
-
-  // Update the field values in state on blur or change
-  const handleFieldChange = (name: string, value: unknown) => {
-    setStateValue((prev) => ({ ...prev, [name]: value }));
-  };
 
   const handleAutocomplete = async (fieldName: string, prompt: string) => {
     setIsLoading(true);
@@ -96,11 +113,27 @@ export default function FormComponent({ onSubmit, formConfig }: FormComponentPro
     }
   };
 
+  // const handleFieldChange = (name: string, value: unknown) => {
+  //   setStateValue((prev) => ({ ...prev, [name]: value }));
+  // };
+
+  const handleFieldChange = (name: string, value: Updater<string | never[]>) => {
+    setStateValue((prev) => ({ ...prev, [name]: value }));
+    
+    form.setFieldValue(name, value);
+    // Clear error if value is provided
+    if (errors[name] && value !== "") {
+      setErrors((prev) => {
+        const { [name]: _, ...rest } = prev;
+        return rest;
+      });
+    }
+  };
+
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        e.stopPropagation();
         void form.handleSubmit();
       }}
       className="p-5 space-y-6 border bg-white border-gray-900/10 rounded-lg shadow-sm"
@@ -133,6 +166,8 @@ export default function FormComponent({ onSubmit, formConfig }: FormComponentPro
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
                   {col.label}
+                  {col.required && <span>*</span>}
+                  {/* {col.required && errors[col.name] && <span className="text-red-600"> Required</span>} */}
                 </Label>
                 <div className="mt-2">
                   {(() => {
@@ -152,14 +187,16 @@ export default function FormComponent({ onSubmit, formConfig }: FormComponentPro
                                 onChange={(e) =>
                                   field.handleChange(e.target.value)
                                 }
-                                className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
+                                className={`block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6 ${
+                                  errors[col.name] ? "ring-red-500" : ""
+                                }`}
                               />
                             )}
                           </form.Field>
                         );
                       case "textarea":
                         return (
-                          <div className="space-y-4">
+                          <div className="space-y-5">
                             <form.Field name={col.name}>
                               {(field) => (
                                 <Textarea
@@ -171,17 +208,14 @@ export default function FormComponent({ onSubmit, formConfig }: FormComponentPro
                                       : field.state.value
                                   }
                                   onBlur={(e) => handleFieldChange(col.name, e.target.value)}
-                                  onChange={(e) => {
-                                    field.handleChange(e.target.value);
-                                    setStateValue((prev) => ({
-                                      ...prev,
-                                      [col.name]: e.target.value,
-                                    }));
-                                  }}
-                                  className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6 min-h-[125px]"
+                                  onChange={(e) => field.handleChange(e.target.value)}
+                                  className={`block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6 min-h-[125px] ${
+                                    errors[col.name] ? "ring-red-500" : ""
+                                  }`}
                                 />
                               )}
                             </form.Field>
+
                             {col.autocomplete && (
                               <div className="flex justify-end cursor-pointer">
                                 <div

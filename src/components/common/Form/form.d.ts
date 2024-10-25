@@ -1,4 +1,5 @@
 export default interface FormDefinition {
+    forEach(arg0: (field: { required: any; name: string | number }) => void): unknown
     headline?: string
     description?: string
     fields: Field[][]
@@ -11,7 +12,7 @@ export interface Field {
     name: string
     placeholder?: string
     description?: string
-    required?: boolean
+    required: boolean
     options?: Option[]
     autocomplete?: Autocomplete
 }

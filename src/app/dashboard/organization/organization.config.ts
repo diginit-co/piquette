@@ -29,19 +29,20 @@ const tableStructure: TableDefinition = {
  * Form Structure
  */
 const organizationForm: FormDefinition = {
-  
   fields: [
     [
       { label: "Name", type: "text", name: "name", required: true, placeholder: "Enter the name of your organization" },
       { label: "Location", type: "text", name: "location", required: true, placeholder: "City & State" },
-      { label: "Website", type: "text", name: "url", required: true },
+      { label: "Website", type: "text", name: "url", required: false },
     ],
     [
-      { label: "Industry", type: "select", name: "industry", required: true, options: [
-        {label: "Retail", value: "retail"},
-        {label: "Hospitality", value: "hospitality"},
-        {label: "Health Care" , value: "healthcare"},
-      ],
+      {
+        label: "Industry", type: "select", name: "industry", required: false, options: [
+          { label: "Retail", value: "retail" },
+          { label: "Hospitality", value: "hospitality" },
+          { label: "Health Care", value: "healthcare" },
+          { label: "Education", value: "education" },
+        ],
 
       },
     ],
@@ -58,7 +59,10 @@ const organizationForm: FormDefinition = {
   ],
   buttons: [
     { label: "Save", type: "submit", variant: "default" }
-  ]
+  ],
+  forEach: function (arg0: (field: { required: any; name: string | number; }) => void): unknown {
+    throw new Error("Function not implemented.");
+  }
 }
 
 /**
