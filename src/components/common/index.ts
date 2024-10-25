@@ -2,7 +2,7 @@ import AccountDropdownComponent from './account'
 import ActionsComponent from './actions'
 import AlertComponent from './alert'
 import BreadcrumbsComponent from './breadcrumbs'
-import ChatComponent from './chat'
+// import ChatComponent from './chat'
 import ContentComponent from './Content/content'
 import FooterComponent from './footer'
 import FormComponent from './Form/form'
@@ -21,7 +21,7 @@ export {
     ActionsComponent,
     AlertComponent,
     BreadcrumbsComponent,
-    ChatComponent,
+    // ChatComponent,
     ContentComponent,
     FooterComponent,
     FormComponent,

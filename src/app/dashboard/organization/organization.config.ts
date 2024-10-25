@@ -37,11 +37,17 @@ const organizationForm: FormDefinition = {
       { label: "Website", type: "text", name: "url", required: true },
     ],
     [
-      { label: "Description", type: "textarea", name: "description", required: true, autocomplete: { type: "openai", mode: "complete" } },
+      {
+        label: "Description", type: "textarea", name: "description", required: true,
+        autocomplete: {
+          type: "openai",
+          mode: "complete",
+          prompt: "You are a content writer specializing in media-focused messaging. Craft a concise public description for this business, intended for use on its website. Keep the tone informative and neutral, focusing on describing the organization without including contact details or making it sound like a sales pitch."
+        }
+      },
     ]
   ],
   buttons: [
-    { label: "Cancel", type: "reset", variant: "ghost" },
     { label: "Submit", type: "submit", variant: "default" }
   ]
 }

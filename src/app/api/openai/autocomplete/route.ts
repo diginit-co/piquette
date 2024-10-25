@@ -4,8 +4,12 @@ import { generateAutocompleteContent } from "~/server/services/openai/autocomple
 // Define the POST method handler explicitly
 export async function POST(req: NextRequest) {
   try {
-    const { fields } = await req.json();
-    const content = await generateAutocompleteContent(fields);
+    const { prompt, fields } = await req.json();
+
+    if (!prompt || !fields) {
+      return NextResponse.json({ error: "Prompt and JSON data are required" }, { status: 400 });
+    }
+    const content = await generateAutocompleteContent(fields, prompt);
 
     return NextResponse.json({ content }, { status: 200 });
   } catch (error) {

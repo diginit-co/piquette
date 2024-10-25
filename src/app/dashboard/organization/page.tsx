@@ -1,8 +1,7 @@
 import { type Metadata } from "next";
 import { HeaderComponent } from '~/components/common';
 import Column from '~/components/templates/column';
-import { OrganizationIndex } from '~/app/_components/Organization';
-import { Organization } from "@clerk/nextjs/server";
+import {OrganizationIndex } from './_components';
 
 export const metadata: Metadata = {
   title: `Organization | Piquette`,
@@ -22,7 +21,8 @@ export default function OrganizationPage() {
           {label: "New Organization", type: "link", href: "/dashboard/organization/new"},
         ]}
       />
-      [List Organizations]
+      <OrganizationIndex />
+    
     </Column>  
   )
 }

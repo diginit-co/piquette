@@ -45,6 +45,7 @@ interface FormComponentProps {
 }
 
 export default function FormComponent({ onSubmit, formConfig }: FormComponentProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const [stateValue, setStateValue] = useState<Record<string, unknown>>({});
   const form = useForm({
     defaultValues: {
@@ -66,18 +67,22 @@ export default function FormComponent({ onSubmit, formConfig }: FormComponentPro
     setStateValue((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAutocomplete = async (fieldName: string) => {
-    // Capture current stateValue from useState
+  const handleAutocomplete = async (fieldName: string, prompt: string) => {
+    setIsLoading(true);
     const formValues = stateValue;
   
     try {
       const response = await fetch("/api/openai/autocomplete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ fields: formValues })
+        body: JSON.stringify({ 
+          prompt, 
+          fields: JSON.stringify(formValues) // Send prompt and stringified JSON object
+        }),
       });
       
       const data = await response.json();
+      setIsLoading(false);
       if (data.content) {
         // Update the specific field with the generated content
         setStateValue((prev) => ({
@@ -157,26 +162,32 @@ export default function FormComponent({ onSubmit, formConfig }: FormComponentPro
                             <form.Field name={col.name}>
                               {(field) => (
                                 <Textarea
-                                value={
-                                  stateValue[col.name] !== undefined
-                                    ? String(stateValue[col.name])
-                                    : Array.isArray(field.state.value)
-                                    ? field.state.value.join("")
-                                    : field.state.value
-                                }
-                                onBlur={(e) => handleFieldChange(col.name, e.target.value)}
-                                onChange={(e) => field.handleChange(e.target.value)}
-                                className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6 min-h-[125px]"
-                              />
+                                  value={
+                                    stateValue[col.name] !== undefined
+                                      ? String(stateValue[col.name])
+                                      : Array.isArray(field.state.value)
+                                      ? field.state.value.join("")
+                                      : field.state.value
+                                  }
+                                  onBlur={(e) => handleFieldChange(col.name, e.target.value)}
+                                  onChange={(e) => {
+                                    field.handleChange(e.target.value);
+                                    setStateValue((prev) => ({
+                                      ...prev,
+                                      [col.name]: e.target.value,
+                                    }));
+                                  }}
+                                  className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6 min-h-[125px]"
+                                />
                               )}
                             </form.Field>
                             {col.autocomplete && (
                               <div className="flex justify-end cursor-pointer">
                                 <div
                                   className="flex items-center justify-center space-x-1 bg-white px-3 py-1 rounded-md border border-gray-200 hover:bg-gray-100 transition duration-200 ease-in-out"
-                                  onClick={() => handleAutocomplete(col.name)}
+                                  onClick={() => handleAutocomplete(col.name, col.autocomplete?.prompt ?? "")}
                                 >
-                                  <ChatIcon className="w-4 h-4 text-blue-400 hover:text-blue-500" />
+                                  <ChatIcon className={`w-4 h-4 text-blue-400 transition-transform ${isLoading ? 'animate-spin' : ''}`} />
                                   <span className="text-sm font-medium">
                                     Autocomplete with AI
                                   </span>

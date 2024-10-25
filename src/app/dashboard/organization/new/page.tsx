@@ -4,7 +4,7 @@ import { currentUser } from '@clerk/nextjs/server'
 import { type Metadata } from "next";
 
 import { HeaderComponent } from '~/components/common';
-import { OrganizationForm } from '~/app/_components/Organization';
+import { OrganizationForm } from './../_components';
 
 import Column from '~/components/templates/column';
 
@@ -22,13 +22,13 @@ export default async function NewExamplePage() {
 
   return (
     <Column>
-      <HeaderComponent title="Demo Form" 
-        description="Form to display flexibilty of FormComponent"
+      
+      <HeaderComponent title="Create Organization" 
+        description="Create a new organization"
       />
-      {/**
-       * In order to keep the page 'server-side', it is necessary to pass the formConfig object to the FormComponent.
-       */}
+      
       <OrganizationForm  />
+
     </Column>
   );
 }

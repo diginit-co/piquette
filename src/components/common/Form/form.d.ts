@@ -31,5 +31,6 @@ type Option = {
 type Autocomplete = {
     type: "openai"
     mode: "prompt" | "complete"
+    prompt?: string
 }
 

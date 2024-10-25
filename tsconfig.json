@@ -37,6 +37,6 @@
     "**/*.cjs",
     "**/*.js",
     ".next/types/**/*.ts"
-, "src/components/common/actions"  ],
+, "src/components/common/actions", "src/components/common/chat"  ],
   "exclude": ["node_modules"]
 }
