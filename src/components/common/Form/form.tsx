@@ -95,7 +95,7 @@ const handleAutocomplete = async (fieldName: string, prompt: string) => {
   const formValues = stateValue;
 
   try {
-    const response = await fetch("/api/openai/", {
+    const response = await fetch("/api/openai/autocomplete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
