@@ -63,9 +63,8 @@ const organizationForm: FormDefinition = {
 }
 
 /**
- * Export the exampleConfig object
+ * Export the assistantConfig object
  */
-export const organizationConfig = {
-    form: organizationForm,
-    table: tableStructure
+export const assistantConfig = {
+    assistantId: "asst_oG2FTE7yodQQu7iabvQIXNPN"
 }

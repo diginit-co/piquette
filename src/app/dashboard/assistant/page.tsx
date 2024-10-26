@@ -2,6 +2,9 @@ import { type Metadata } from "next";
 import { HeaderComponent } from '~/components/common';
 import Column from '~/components/templates/column';
 
+import { assistantConfig } from './assistant.config';
+import { AssistantComponent } from '~/components/common/Assistant';
+
 
 export const metadata: Metadata = {
   title: `Assistant | Piquette`,
@@ -20,6 +23,7 @@ export default function AssistantPage() {
         
       />
       
+      <AssistantComponent assistantId={assistantConfig.assistantId} />
     
     </Column>  
   )

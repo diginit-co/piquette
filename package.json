@@ -61,6 +61,7 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.0",
     "react-markdown": "^9.0.1",
+    "remark-gfm": "^4.0.0",
     "server-only": "^0.0.1",
     "shadcn": "^2.1.0",
     "skeleton": "^0.1.2",
