@@ -15,10 +15,10 @@ export const metadata: Metadata = {
 export default function OrganizationPage() {
   return (
     <Column>
-      <HeaderComponent title="Organizatons" 
+      <HeaderComponent title="Organizations" 
         description="Organization starter"
         actions={[
-          {label: "New Organization", type: "link", href: "/dashboard/organization/new"},
+          {label: "New Organization", type: "link", href: "/dashboard/organizations/new"},
         ]}
       />
       <OrganizationIndex />
