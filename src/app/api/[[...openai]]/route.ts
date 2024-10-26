@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server"; // Change here for type import
 import { NextResponse } from "next/server";
-import { generateAutocompleteContent } from "~/server/services/openai/autocomplete";
+import { generateAutocompleteContent } from "~/server/services/openai";
 
 // Define the types for the expected request body
 interface RequestBody {
