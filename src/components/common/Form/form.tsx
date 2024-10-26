@@ -95,7 +95,7 @@ const handleAutocomplete = async (fieldName: string, prompt: string) => {
   const formValues = stateValue;
 
   try {
-    const response = await fetch("/api/openai/autocomplete", {
+    const response = await fetch("/api/openai/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
@@ -202,12 +202,14 @@ const handleFieldChange = (name: string, value: string | Updater<string | never[
                             <form.Field name={col.name}>
                               {(field) => (
                                 <Textarea
+                                  // value={
+                                  //   stateValue[col.name] !== undefined
                                   value={
                                     stateValue[col.name] !== undefined
                                       ? String(stateValue[col.name])
                                       : Array.isArray(field.state.value)
                                       ? field.state.value.join("")
-                                      : field.state.value
+                                      : String(field.state.value)
                                   }
                                   onBlur={(e) => handleFieldChange(col.name, e.target.value)}
                                   onChange={(e) => field.handleChange(e.target.value)}
