@@ -5,6 +5,7 @@ import { generateAutocompleteContent, generateAssistantContent } from "~/server/
 // Define the types for the expected request body
 interface RequestBody {
   assistantId?: string;
+  threadId?: string;
   prompt: string;
   fields?: Record<string, string>;
 }
@@ -22,34 +23,52 @@ export async function POST(req: NextRequest) {
     const endpointType = path.split('/').pop(); 
 
     
-    let content: string;
-    const { prompt, fields, assistantId } = body;
+    
+    const { prompt, fields, assistantId, threadId } = body;
 
     switch (endpointType) {
+      /**
+       * Autocomplete
+       */
       case "autocomplete":
       
         if (!prompt || !fields) {
           return NextResponse.json({ error: "Prompt and JSON data are required" }, { status: 400 });
         }
 
-        content = await generateAutocompleteContent(fields, prompt);
-        break;
+        const autocompleteContent = await generateAutocompleteContent(fields, prompt);
+        
+        return NextResponse.json({ autocompleteContent }, { status: 200 });
+
+      /**
+       * Ask Assistant
+       */
       case "ask-assistant":
-        
-        if (!prompt || !assistantId) {
-          return NextResponse.json({ error: "Prompt and JSON data are required" }, { status: 400 });
+
+        if (!assistantId || !prompt) {
+          return NextResponse.json({ error: "Assistant ID and prompt are required." }, { status: 400 });
         }
-        
-        content = await generateAssistantContent(assistantId, prompt);
+
+        // Fetch response from OpenAI assistant service, using or creating a thread
+        const { content, newThreadId } = await generateAssistantContent(assistantId, prompt, threadId);
+
+          // Respond with the generated content and updated thread ID
+          return NextResponse.json({
+            content,
+            threadId: newThreadId ?? threadId, // Return the existing or newly created thread ID
+          });
         break;
+      /** 
+       * Chat
+       */
       case "chat":
-        content = "Response from chat"; // Replace with the actual logic
+        return  "Response from chat"; // Replace with the actual logic
         break;
       default:
         return NextResponse.json({ error: "Invalid endpoint type" }, { status: 400 });
     }
 
-    return NextResponse.json({ content }, { status: 200 });
+    
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Failed to generate content" }, { status: 500 });

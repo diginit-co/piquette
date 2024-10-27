@@ -86,7 +86,7 @@ export default function FormComponent({ onSubmit, formConfig }: FormComponentPro
 
   // Define a type for the API response
 interface AutocompleteResponse {
-  content: string;
+  autocompleteContent: string;
 }
 
 // Change the type assertion in the handleAutocomplete function
@@ -106,12 +106,12 @@ const handleAutocomplete = async (fieldName: string, prompt: string) => {
 
     const data = await response.json() as AutocompleteResponse;
     setIsLoading(false);
-    if (data.content) {
+    if (data.autocompleteContent) {
       setStateValue((prev) => ({
         ...prev,
-        [fieldName]: data.content
+        [fieldName]: data.autocompleteContent
       }));
-      form.setFieldValue(fieldName, data.content);
+      form.setFieldValue(fieldName, data.autocompleteContent);
     }
   } catch (error) {
     console.error("Failed to autocomplete:", error);
