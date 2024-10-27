@@ -10,6 +10,10 @@ import {
     BuildingOfficeIcon as OrganizationIcon
 } from '@heroicons/react/24/outline'
 
+import {
+    Pin
+} from "lucide-react"
+
 export const piquetteConfig = {
     meta: {
         id: 'piquette',
@@ -84,6 +88,7 @@ export const piquetteConfig = {
             {id: 'assistant', label: 'Assistant', href: '/dashboard/assistant', icon: ChatIcon},
         ],
         services: [
+            {id: 'pinned', label: 'Pinned', href: '/dashboard/services/pinned', icon: Pin},
             {id: 'favorites', label: 'Favorites', href: '/dashboard/services/favorites', icon: StarIcon},
             {id: 'saved', label: 'Saved', href: '/dashboard/services/saved', icon: FolderIcon},
             {id: 'likes', label: 'Liked', href: '/dashboard/services/liked', icon: HandThumbUpIcon},

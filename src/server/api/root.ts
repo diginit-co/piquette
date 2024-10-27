@@ -3,6 +3,7 @@ import { saveRouter } from "~/server/api/routers/save";
 import { likeRouter } from "~/server/api/routers/like";
 import { dislikeRouter } from "~/server/api/routers/dislike";
 import { archiveRouter } from "./routers/archive";
+import { pinRouter } from "./routers/pin";
 import { restRouter } from "~/server/api/routers/rest";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
@@ -18,6 +19,7 @@ export const appRouter = createTRPCRouter({
   dislike: dislikeRouter,
   archive: archiveRouter,
   save: saveRouter,
+  pin: pinRouter,
 });
 
 // export type definition of API

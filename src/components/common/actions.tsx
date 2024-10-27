@@ -98,7 +98,7 @@ import {
 
 // Component props interface
 interface ActionsComponentProps {
-    actions: Array<"save" | "like" | "dislike" | "share" | "hide" | "edit" | "archive" | "favorite" | "remove">;
+    actions: Array<"save" | "like" | "dislike" | "share" | "hide" | "edit" | "archive" | "favorite" | "remove" | "pin">;
     data: {
         model: string;
         id: number;
@@ -502,6 +502,81 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
             }
         }
     };
+
+    /** Pinned
+     * 
+     */
+
+    const removePinMutation = api.pin.delete.useMutation();
+    const addPinMutation = api.pin.add.useMutation();
+
+    const handleAddPin = async (currentType: string, currentObject: string) => {
+        try {
+            await addPin({
+                type: currentType,
+                object: currentObject,
+                createdBy: "Brooke",
+                updatedBy: "Brooke"
+            });
+            toast({
+                variant: "default",
+                title: `Successfully added ${currentObject} to your archived objects`,
+            });
+            setOpenDialog(false);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Error during removal:", error.message);
+            } else {
+                console.error("Unexpected error during removal:", error);
+            }
+        }
+    };
+
+    const removePin = async (params: { id: number; key: string; type: string; object: string }) => {
+        try {
+            await removePinMutation.mutateAsync(params);
+            console.log("Pin removed successfully");
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Error removing save:", error.message);
+            } else {
+                console.error("Unexpected error:", error);
+            }
+        }
+    };
+
+    const addPin = async (params: { type: string; object: string; createdBy: string; updatedBy: string; }) => {
+        try {
+            await addPinMutation.mutateAsync(params);
+            console.log("Pin added successfully");
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Error adding like:", error.message);
+            } else {
+                console.error("Unexpected error:", error);
+            }
+        }
+    };
+
+    const handleRemovePin = async () => {
+        try {
+            await removePin({ id: currentId!, key: currentKey!, type: currentType!, object: currentObject! });
+            setOpenDialog(false);
+
+            toast({
+                variant: "default",
+                title: `Successfully unpinned ${currentObject}`,
+            });
+            
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error("Error during removal:", error.message);
+            } else {
+                console.error("Unexpected error during removal:", error);
+            }
+        }
+    };
+
     /** Shared
      * 
      */
@@ -531,6 +606,8 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
                 void handleAddArchive(data.type, data.object);
             } else if (action === 'dislike') {
                 void handleAddDislike(data.type, data.object);
+            } else if (action === 'pin') {
+                void handleAddPin(data.type, data.object);
             } else if (action === 'share') {
                 console.log('Share');
             }
@@ -559,7 +636,6 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
                                 variant="destructive"
                                 onClick={async () => {
                                     await handleRemoveFavorite();
-                                    // setOpenDialog(false);
                                 }}
                             >Remove</Button>
                         : currentModel === "like" ?
@@ -567,7 +643,6 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
                                 variant="destructive"
                                 onClick={async () => {
                                     await handleRemoveLike();
-                                    // setOpenDialog(false);
                                 }}
                             >Remove</Button>
                         : currentModel === "dislike" ?
@@ -575,7 +650,6 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
                                 variant="destructive"
                                 onClick={async () => {
                                     await handleRemoveDislike();
-                                    // setOpenDialog(false);
                                 }}
                             >Remove</Button>
                         : currentModel === "archive" ?
@@ -583,7 +657,13 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
                                 variant="destructive"
                                 onClick={async () => {
                                     await handleRemoveArchive();
-                                    // setOpenDialog(false);
+                                }}
+                            >Remove</Button>
+                        : currentModel === "pin" ?
+                            <Button
+                                variant="destructive"
+                                onClick={async () => {
+                                    await handleRemovePin();
                                 }}
                             >Remove</Button>
                         :
@@ -591,7 +671,6 @@ export default function ActionsComponent({ actions, data }: ActionsComponentProp
                                 variant="destructive"
                                 onClick={async () => {
                                     await handleRemoveSave();
-                                    // setOpenDialog(false);
                                 }}
                             >Remove</Button>
                         }
