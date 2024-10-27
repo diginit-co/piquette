@@ -18,26 +18,19 @@ import { createId } from "@paralleldrive/cuid2";
  */
 export const createTable = pgTableCreator((name) => `piquette_${name}`);
 
-export const posts = createTable(
-  "post",
-  {
-    id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-      () => new Date()
-    ),
-  },
-  (example) => ({
-    nameIndex: index("name_idx").on(example.name),
-  })
-);
-
-/**
- * favorites
- */
+/** Services
+ * 
+ * Favorites
+ * Save
+ * Like
+ * Dislike
+ * Archive
+ * Shared
+ * Pinned
+ * 
+ * Services are intented to work across multiple models though the actions component.
+ * It's probably best to not modify these in any manner.
+*/
 export const favorites = createTable(
   "favorite",
   {
@@ -168,6 +161,35 @@ export const pins = createTable(
     cuid: varchar("cuid", { length: 256 }).default(createId()).notNull(),
     object: varchar("object", { length: 256 }).notNull(),
     type: varchar("type", { length: 256 }).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    createdBy: varchar("created_by", { length: 256 }).notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+      () => new Date()
+    ),
+    updatedBy: varchar("updated_by", { length: 256 }).notNull(),
+    archivedAt: timestamp("archived_at", { withTimezone: true }),
+    archivedBy: varchar("archived_by", { length: 256 }),
+  },
+);
+
+/** Models
+ * 
+ */
+
+export const businesses = createTable(
+  "business",
+  {
+    id: serial("id").primaryKey(),
+    cuid: varchar("cuid", { length: 256 }).default(createId()).notNull(),
+    token: varchar("token", { length: 32 }),
+    owner: varchar("owner", { length: 256 }).notNull(),
+    name: varchar("name", { length: 256 }).notNull(),
+    location: varchar("location", { length: 256 }).notNull(),
+    url: varchar("url", { length: 256 }),
+    industry: varchar("industry", { length: 256 }),
+    description: varchar("description", { length: 256 }),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),

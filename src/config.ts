@@ -2,15 +2,16 @@ import {
     ArchiveBoxXMarkIcon,
     StarIcon,
     ShareIcon,
-    HomeIcon,
     HandThumbUpIcon,
     HandThumbDownIcon,
     FolderIcon,
     SparklesIcon as ChatIcon,
-    BuildingOfficeIcon as OrganizationIcon
 } from '@heroicons/react/24/outline'
 
 import {
+    Home as HomeIcon,
+    Building as BusinessIcon,
+    Building2 as OrganizationIcon,
     Pin
 } from "lucide-react"
 
@@ -84,6 +85,7 @@ export const piquetteConfig = {
     app: {
         features: [
             {id: 'mockup', label: 'Mockup', href: '/dashboard', icon: HomeIcon},
+            {id: 'businesses', label: 'Businesses', href: '/dashboard/businesses', icon: BusinessIcon},
             {id: 'organizations', label: 'Organizations', href: '/dashboard/organizations', icon: OrganizationIcon},
             {id: 'assistant', label: 'Assistant', href: '/dashboard/assistant', icon: ChatIcon},
         ],
