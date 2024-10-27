@@ -128,7 +128,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState,  } from "react";
 import { Textarea } from "~/components/ui/textarea";
 import { Button } from "~/components/ui/button";
 import { nanoid } from "nanoid";
@@ -151,11 +151,13 @@ interface ChatMessage {
 }
 
 export default function AssistantComponent({ assistantId }: AssistantComponentProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const [input, setInput] = useState("");
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [threadId, setThreadId] = useState<string | null>(null);
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     if (!input.trim()) return;
 
     // Add user's message to the chat
@@ -194,9 +196,10 @@ export default function AssistantComponent({ assistantId }: AssistantComponentPr
         content: result.content || "No response from assistant.",
       };
 
+      setIsLoading(false);
       setChatMessages((prevMessages) => [...prevMessages, assistantMessage]);
     } catch (error) {
-      // Handle error
+      setIsLoading(false);
       console.error("Error communicating with assistant:", error);
     }
   };
@@ -218,13 +221,14 @@ export default function AssistantComponent({ assistantId }: AssistantComponentPr
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Type your message..."
+          disabled={isLoading}
         />
         <div className="flex justify-end space-x-2 mt-2">
           <Button variant="ghost" onClick={() => setInput("")}>
             Clear
           </Button>
           <Button variant="default" onClick={handleSubmit}>
-            Send
+            {isLoading ? "Sending..." : "Send"}
           </Button>
         </div>
       </div>
