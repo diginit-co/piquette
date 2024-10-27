@@ -119,10 +119,16 @@ const handleAutocomplete = async (fieldName: string, prompt: string) => {
 };
 
 // Update the handleFieldChange function signature
-const handleFieldChange = (name: string, value: string | Updater<string | never[]>) => { // Add string type to value
-  setStateValue((prev) => ({ ...prev, [name]: value }));
-  
+const handleFieldChange = (name: string, value: string | Updater<string | never[]>) => {
+  // Update the state with the new value
+  setStateValue((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+
+  // Update the form field with the new value
   form.setFieldValue(name, value);
+
   // Clear error if value is provided
   if (errors[name] && value !== "") {
     setErrors((prev) => {
@@ -202,8 +208,6 @@ const handleFieldChange = (name: string, value: string | Updater<string | never[
                             <form.Field name={col.name}>
                               {(field) => (
                                 <Textarea
-                                  // value={
-                                  //   stateValue[col.name] !== undefined
                                   value={
                                     stateValue[col.name] !== undefined
                                       ? String(stateValue[col.name])
@@ -212,7 +216,12 @@ const handleFieldChange = (name: string, value: string | Updater<string | never[
                                       : String(field.state.value)
                                   }
                                   onBlur={(e) => handleFieldChange(col.name, e.target.value)}
-                                  onChange={(e) => field.handleChange(e.target.value)}
+                                  onChange={(e) => {
+                                    // Handle user input changes directly
+                                    handleFieldChange(col.name, e.target.value);
+                                    field.handleChange(e.target.value);
+                                  }}
+                                  disabled={isLoading}
                                   className={`block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6 min-h-[125px] ${
                                     errors[col.name] ? "ring-red-500" : ""
                                   }`}
