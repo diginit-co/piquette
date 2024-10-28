@@ -8,6 +8,7 @@ import {
   serial,
   timestamp,
   varchar,
+  text
 } from "drizzle-orm/pg-core";
 import { createId } from "@paralleldrive/cuid2";
 /**
@@ -189,7 +190,7 @@ export const businesses = createTable(
     location: varchar("location", { length: 256 }).notNull(),
     url: varchar("url", { length: 256 }),
     industry: varchar("industry", { length: 256 }),
-    description: varchar("description", { length: 256 }),
+    description: text("description"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),

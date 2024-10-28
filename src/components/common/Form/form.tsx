@@ -40,9 +40,10 @@ interface FormComponentProps {
   type?: string;
   formConfig: FormDefinition;
   onSubmit: (data: Record<string, unknown>) => void;
+  isFormLoading: boolean;
 }
 
-export default function FormComponent({ onSubmit, formConfig }: FormComponentProps) {
+export default function FormComponent({ onSubmit, isFormLoading,formConfig }: FormComponentProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [stateValue, setStateValue] = useState<Record<string, unknown>>({});
@@ -297,7 +298,7 @@ const handleFieldChange = (name: string, value: string | Updater<string | never[
               button.type === "reset" ? () => form.reset() : undefined
             }
           >
-            {button.label}
+            {isFormLoading ? "Submitting..." : button.label}
           </Button>
         ))}
       </div>
