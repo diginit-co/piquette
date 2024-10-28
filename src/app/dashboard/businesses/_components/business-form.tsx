@@ -63,11 +63,7 @@ export function BusinessForm() {
         url: values.url as string,
         industry: values.industry as string,
       });
-      toast({
-        variant: "default",
-        title: "Form Submitted",
-        description: JSON.stringify(values, null, 2),
-      });
+      setIsLoading(false);
     } catch (err) {
       console.error("Error creating business:", err);
       setError("An error occurred while submitting the form.");
