@@ -1,7 +1,9 @@
+import { currentUser } from '@clerk/nextjs/server'
 import { type Metadata } from "next";
+
 import { HeaderComponent } from '~/components/common';
 import Column from '~/components/templates/column';
-import {BusinessIndex } from './_components';
+import { BusinessIndex } from './_components';
 
 export const metadata: Metadata = {
   title: `Business | Piquette`,
@@ -12,7 +14,12 @@ export const metadata: Metadata = {
 
 
 
-export default function BusinessPage() {
+export default async function BusinessPage() {
+
+  const user = await currentUser()
+
+  if (!user) return <div>This is an authenticated route</div>
+
   return (
     <Column>
       <HeaderComponent title="Businesses" 
@@ -21,7 +28,7 @@ export default function BusinessPage() {
           {label: "New Business", type: "link", href: "/dashboard/businesses/new"},
         ]}
       />
-      <BusinessIndex />
+      <BusinessIndex userId={user.id} />
     
     </Column>  
   )

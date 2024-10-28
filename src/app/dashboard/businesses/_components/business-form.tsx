@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter
 import { toast } from "~/hooks/use-toast";
 
 import { businessConfig } from "../business.config";
@@ -9,6 +10,7 @@ import { FormComponent } from "~/components/common";
 import { api } from "~/trpc/react";
 
 export function BusinessForm() {
+  const router = useRouter(); // Initialize useRouter
   const utils = api.useUtils();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -23,6 +25,9 @@ export function BusinessForm() {
       });
       // Optionally, invalidate queries or perform other actions on success
       utils.business.invalidate(); // Example to invalidate a query cache
+
+      // Redirect to the businesses dashboard
+      router.push("/dashboard/businesses");
     },
     onError: (err) => {
       toast({
