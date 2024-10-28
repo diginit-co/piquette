@@ -3,6 +3,19 @@
 import { useUser } from "@clerk/nextjs"; // Clerk's hook to get the current user
 import { Suspense } from "react";
 import { api } from "~/trpc/react";
+import moment from "moment";
+import Link from "next/link";
+
+import { ActionsComponent } from "~/components/common";
+
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter
+} from "~/components/ui/card";
 import { Skeleton } from "~/components/ui/skeleton";
 
 interface BusinessIndexProps {
@@ -24,17 +37,39 @@ function BusinessContent({ userId }: BusinessIndexProps) {
 
   // Display the business data
   return (
-    <div className="container mx-auto">
-      
-        {businesses.map((business) => (
-          <div key={business.id} className="border border-gray-200 rounded-lg p-4 space-y-4">
-            <h3 className="text-xl font-bold">{business.name}</h3>
-            <p className="text-gray-600">{business.description}</p>
-            <p className="text-gray-500">{business.location}</p>
-            <p className="text-gray-500">{business.industry}</p>
+    <div className="space-y-4">
+      {businesses.map((business) => (
+        <div 
+          className="flex items-center justify-between border-b border-gray-100 pb-4 space-x-4" 
+          key={business.id}
+        >
+          <div className="flex-1 min-w-0">
+            <p className="font-semibold text-lg text-gray-900">
+              <Link href={`/dashboard/businesses/${business.cuid}`}>
+                {business.name}
+              </Link>
+            </p>
+            <div className="flex items-center gap-x-2 text-xs text-gray-500 mt-1">
+              <p className="whitespace-nowrap">
+                Created: {moment(business.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
+              </p>
+            </div>
           </div>
-        ))}
-      
+          <div className="flex-none">
+            <ActionsComponent 
+              actions={['pin', 'favorite', 'like', 'dislike']} 
+              data={{
+                model: 'like', 
+                id: business.id, 
+                key: business.cuid, 
+                object: business.cuid, 
+                type: 'business', 
+                label: business.name
+              }} 
+            />
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
@@ -44,9 +79,10 @@ export default function BusinessIndex({ userId }: BusinessIndexProps) {
 
   if (!isLoaded) {
     return (
-      <div className="container mx-auto">
+      <div className="container mx-auto space-y-5">
           {Array.from({ length: 10 }).map((_, index) => (
             <div key={index} className="border border-gray-200 rounded-lg p-4 space-y-4">
+              <Skeleton className="h-4 w-full" />
               <Skeleton className="h-4 w-full" />
               <Skeleton className="h-4 w-full" />
             </div>
@@ -62,11 +98,9 @@ export default function BusinessIndex({ userId }: BusinessIndexProps) {
   return (
     <Suspense
       fallback={
-        <div className="container mx-auto">
-          {Array.from({ length: 12 }).map((_, index) => (
+        <div className="container mx-auto space-y-5">
+          {Array.from({ length: 10 }).map((_, index) => (
             <div key={index} className="border border-gray-200 rounded-lg p-4 space-y-4">
-              <Skeleton className="h-4 w-1/2" />
-              <Skeleton className="h-4 w-2/3" />
               <Skeleton className="h-4 w-full" />
               <Skeleton className="h-4 w-full" />
               <Skeleton className="h-4 w-full" />
@@ -75,7 +109,14 @@ export default function BusinessIndex({ userId }: BusinessIndexProps) {
         </div>
       }
     >
-      <BusinessContent userId={userId} />
+      <Card>
+        <CardHeader>
+          [toolbar]
+        </CardHeader>
+        <CardContent>
+          <BusinessContent userId={userId} />
+        </CardContent>
+      </Card>
     </Suspense>
   );
 }
