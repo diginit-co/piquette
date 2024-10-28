@@ -13,7 +13,7 @@ export function BusinessForm() {
   const router = useRouter(); // Initialize useRouter
   const utils = api.useUtils();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   // Define the mutation using `useMutation`
   const createBusinessMutation = api.business.create.useMutation({
