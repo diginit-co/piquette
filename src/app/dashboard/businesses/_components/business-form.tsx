@@ -17,14 +17,19 @@ export function BusinessForm() {
 
   // Define the mutation using `useMutation`
   const createBusinessMutation = api.business.create.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast({
         variant: "default",
         title: "Business Created",
         description: "Your business has been created successfully!",
       });
-      // Optionally, invalidate queries or perform other actions on success
-      utils.business.invalidate(); // Example to invalidate a query cache
+
+      // Invalidate queries or perform other actions on success
+      try {
+        await utils.business.invalidate(); // Await the invalidate query operation
+      } catch (invalidateError) {
+        console.error("Failed to invalidate cache:", invalidateError);
+      }
 
       // Redirect to the businesses dashboard
       router.push("/dashboard/businesses");
