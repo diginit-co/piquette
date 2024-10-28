@@ -1,16 +1,16 @@
 import { HomeIcon } from '@heroicons/react/20/solid'
 
 interface BreadcrumbsCompomentProps {
-    links: Array<{ name: string, href: string, current: boolean }>;
+    links: Array<{ label: string, href: string, current: boolean }>;
 }
 export default function BreadcrumbsComponent( { links }: BreadcrumbsCompomentProps) {
   return (
     <nav aria-label="Breadcrumb" className="flex border-b border-gray-200 bg-white">
-      <ol role="list" className="mx-auto flex w-full max-w-screen-xl space-x-4 px-4 sm:px-6 lg:px-8">
+      <ol role="list" className="flex w-full max-w-screen-xl space-x-4 px-4 sm:px-6 lg:px-8">
         {links.map((page) => (
           // if it's the first element use the home link
-          page.name === 'Home' ? (
-            <li key={page.name} className="flex">
+          page.label === 'Home' ? (
+            <li key={page.label} className="flex">
               <div className="flex items-center">
                 <a href={page.href} className="text-gray-400 hover:text-gray-500">
                   <HomeIcon aria-hidden="true" className="h-5 w-5 flex-shrink-0" />
@@ -19,7 +19,7 @@ export default function BreadcrumbsComponent( { links }: BreadcrumbsCompomentPro
               </div>
             </li>
           ) : (
-            <li key={page.name} className="flex">
+            <li key={page.label} className="flex">
               <div className="flex items-center">
                 <svg
                   fill="currentColor"
@@ -35,7 +35,7 @@ export default function BreadcrumbsComponent( { links }: BreadcrumbsCompomentPro
                   aria-current={page.current ? 'page' : undefined}
                   className="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
                 >
-                  {page.name}
+                  {page.label}
                 </a>
               </div>
             </li>

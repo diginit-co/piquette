@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 
 
-export default async function BusinessPage() {
+export default async function BusinessesPage() {
 
   const user = await currentUser()
 

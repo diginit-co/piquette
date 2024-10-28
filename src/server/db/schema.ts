@@ -183,7 +183,7 @@ export const businesses = createTable(
   "business",
   {
     id: serial("id").primaryKey(),
-    cuid: varchar("cuid", { length: 256 }).default(createId()).notNull(),
+    cuid: varchar("cuid", { length: 256 }).notNull(),
     token: varchar("token", { length: 32 }),
     owner: varchar("owner", { length: 256 }).notNull(),
     name: varchar("name", { length: 256 }).notNull(),
