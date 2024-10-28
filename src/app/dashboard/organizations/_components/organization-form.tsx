@@ -35,6 +35,6 @@ export function OrganizationForm() {
     };
 
   return (
-    <FormComponent formConfig={organizationConfig.form} onSubmit={handleFormSubmit} />
+    <FormComponent formConfig={organizationConfig.form} onSubmit={handleFormSubmit} isFormLoading={isLoading} />
   );
 }

@@ -1,10 +1,11 @@
 "use client"
-
+import { useState } from "react"
 import { toast } from "~/hooks/use-toast"
 import { FormComponent } from '~/components/common'
 import {settingsConfig} from '../../dashboard/settings/settings.config'
 
 export default function CancelSettings() {
+    const [isLoading, setIsLoading] = useState(false);
     const handleFormSubmit = (data: Record<string, unknown>) => {
         toast({
             variant: "destructive",
@@ -13,5 +14,5 @@ export default function CancelSettings() {
         });
     }
 
-    return <FormComponent formConfig={settingsConfig.cancelSettings} onSubmit={handleFormSubmit} />
+    return <FormComponent formConfig={settingsConfig.cancelSettings} onSubmit={handleFormSubmit} isFormLoading={isLoading} />
 }
