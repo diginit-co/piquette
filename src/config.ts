@@ -12,6 +12,7 @@ import {
     Home as HomeIcon,
     Building as BusinessIcon,
     Building2 as OrganizationIcon,
+    FolderIcon as DocumentsIcon,
     Pin
 } from "lucide-react"
 
@@ -87,6 +88,7 @@ export const piquetteConfig = {
             {id: 'mockup', label: 'Mockup', href: '/dashboard', icon: HomeIcon},
             {id: 'businesses', label: 'Businesses', href: '/dashboard/businesses', icon: BusinessIcon},
             {id: 'organizations', label: 'Organizations', href: '/dashboard/organizations', icon: OrganizationIcon},
+            {id: 'documents', label: 'Documents', href: '/dashboard/documents', icon: DocumentsIcon},
             {id: 'assistant', label: 'Assistant', href: '/dashboard/assistant', icon: ChatIcon},
         ],
         services: [
