@@ -59,9 +59,6 @@ export function DocumentForm() {
       await createBusinessMutation.mutateAsync({
         name: values.name as string,
         description: values.description as string,
-        location: values.location as string,
-        url: values.url as string,
-        industry: values.industry as string,
       });
       setIsLoading(false);
     } catch (err) {
