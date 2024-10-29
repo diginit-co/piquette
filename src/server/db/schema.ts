@@ -258,7 +258,7 @@ export const documents = createTable(
   {
     id: serial("id").primaryKey(),
     cuid: varchar("cuid", { length: 256 }).notNull(),
-    token: varchar("token", { length: 32 }),
+    token: varchar("token", { length: 32 }).notNull(),
     owner: varchar("owner", { length: 256 }).notNull(),
     name: varchar("name", { length: 256 }).notNull(),
     description: text("description"),

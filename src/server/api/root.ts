@@ -5,6 +5,8 @@ import { dislikeRouter } from "~/server/api/routers/services/dislike";
 import { archiveRouter } from "./routers/services/archive";
 import { pinRouter } from "./routers/services/pin";
 import { restRouter } from "~/server/api/routers/services/rest";
+
+import { documentRouter } from "./routers/document";
 import { businessRouter } from "~/server/api/routers/business";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
@@ -24,6 +26,7 @@ export const appRouter = createTRPCRouter({
   save: saveRouter,
   pin: pinRouter,
   //model routers
+  document: documentRouter,
   business: businessRouter,
 });
 

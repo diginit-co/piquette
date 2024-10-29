@@ -4,7 +4,7 @@ import { currentUser } from '@clerk/nextjs/server'
 import { type Metadata } from "next";
 
 import { HeaderComponent } from '~/components/common';
-import { BusinessForm } from '../_components';
+import { BusinessForm } from '../_businesses';
 
 import Column from '~/components/templates/column';
 
