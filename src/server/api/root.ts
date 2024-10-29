@@ -5,7 +5,7 @@ import { dislikeRouter } from "~/server/api/routers/services/dislike";
 import { archiveRouter } from "./routers/services/archive";
 import { pinRouter } from "./routers/services/pin";
 import { restRouter } from "~/server/api/routers/services/rest";
-import { businessRouter } from "~/server/api/business";
+import { businessRouter } from "~/server/api/routers/business";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
 /**
