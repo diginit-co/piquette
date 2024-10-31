@@ -7,7 +7,7 @@ export default interface FormDefinition {
 
 export interface Field {
     label: string
-    type: "text" | "email" | "tel" | "textarea" | "select" | "radio" | "checkbox" | "switch"
+    type: "text" | "email" | "tel" | "textarea" | "select" | "radio" | "checkbox" | "switch" | "file"
     name: string
     placeholder?: string
     description?: string

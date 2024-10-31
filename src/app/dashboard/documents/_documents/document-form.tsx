@@ -8,6 +8,7 @@ import { documentConfig } from "../document.config";
 import { FormComponent } from "~/components/common";
 
 import { api } from "~/trpc/react";
+import { unknown } from "zod";
 
 export function DocumentForm() {
   const router = useRouter(); // Initialize useRouter
@@ -56,10 +57,20 @@ export function DocumentForm() {
   const handleFormSubmit = async (values: Record<string, unknown>) => {
     setIsLoading(true);
     try {
-      await createBusinessMutation.mutateAsync({
+      const newDoc = await createBusinessMutation.mutateAsync({
         name: values.name as string,
         description: values.description as string,
       });
+
+      const selectedFile = values.file as File;
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
+      const response = await fetch("/api/aws", {
+        method: "POST",
+        body: formData,
+      });
+
       setIsLoading(false);
     } catch (err) {
       console.error("Error creating business:", err);
