@@ -1,14 +1,13 @@
 // /server/services/aws/upload.ts
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-import { nanoid } from "nanoid";
-import fs from "fs";
+import { env } from "~/env"
 
 // Initialize the S3 client
 const s3 = new S3Client({
-    region: "us-east-1",
+    region: env.AWS_REGION,
     credentials: {
-        accessKeyId: "AKIA25O5OIF6PHRRL5PM",
-        secretAccessKey: "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",
+        accessKeyId: env.AWS_ACCESS_KEY_ID!,
+        secretAccessKey: env.AWS_SECRET_ACCESS_KEY!,
     },    
 });
 
@@ -16,7 +15,7 @@ export async function UploadFile(fileBuffer: Buffer, mimeType: string, fileName:
     console.log("Starting file upload to S3");
   
     const params = {
-      Bucket: 'piquette-app',
+      Bucket: env.AWS_S3_BUCKET!,
       Key: fileName,
       Body: fileBuffer,
       ContentType: mimeType,
@@ -26,7 +25,7 @@ export async function UploadFile(fileBuffer: Buffer, mimeType: string, fileName:
       const command = new PutObjectCommand(params);
       await s3.send(command);
   
-      return `https://piquette-app.s3.amazonaws.com/${fileName}`;
+      return `https://${env.AWS_S3_BUCKET}.s3.amazonaws.com/${fileName}`;
     } catch (error) {
       console.error("Error during file upload to S3:", error);
       throw error;

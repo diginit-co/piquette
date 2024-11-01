@@ -120,15 +120,26 @@ const handleAutocomplete = async (fieldName: string, prompt: string) => {
 };
 
 // Update the handleFieldChange function signature
-const handleFieldChange = (name: string, value: string | Updater<string | never[]>) => {
-  // Update the state with the new value
+const handleFieldChange = (
+  name: string, 
+  value: string | File | Updater<string | never[]> | undefined
+) => {
+  if (value === undefined) return; // Guard clause for undefined value
+
+  // Update state with the new value
   setStateValue((prev) => ({
     ...prev,
     [name]: value,
   }));
 
-  // Update the form field with the new value
-  form.setFieldValue(name, value);
+  // Handle different value types
+  const isStringOrArray = (val: any): val is string | unknown[] => typeof val === "string" || Array.isArray(val);
+  
+  if (isStringOrArray(value)) {
+    form.setFieldValue(name, value); // For regular text fields and array inputs
+  } else if (value instanceof File) {
+    form.setFieldValue(name, value as unknown as string); // For file inputs
+  }
 
   // Clear error if value is provided
   if (errors[name] && value !== "") {
@@ -206,24 +217,27 @@ const handleFieldChange = (name: string, value: string | Updater<string | never[
                         );
                       case "file":
                         return (
-                          <form.Field name={col.name}>
-                            {(field) => (
-                              <Input
-                              type="file"
-                              multiple={col.multiple ?? false} // Optional: for multiple file uploads
-                              onChange={(e) => {
-                                const files = e.target.files;
-                                if (files && files.length > 0) {
-                                  field.handleChange(files[0]); // Save the first file's reference
-                                  handleFieldChange(col.name, files[0]); // Save state for display/processing
-                                }
-                              }}
-                              className={`block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6 ${
-                                errors[col.name] ? "ring-red-500" : ""
-                              }`}
-                            />
-                            )}
-                          </form.Field>
+<form.Field name={col.name}>
+  {(field) => (
+    <Input
+      type="file"
+      multiple={col.multiple ?? false} // Optional: for multiple file uploads
+      onChange={(e) => {
+        const files = e.target.files;
+        if (files && files.length > 0) {
+          const selectedFile = files[0];
+          if (selectedFile) { // Ensure the file is defined
+            handleFieldChange(col.name, selectedFile); // Update state and form with the file
+            field.handleChange(selectedFile.name); // Update form with file name or any specific attribute
+          }
+        }
+      }}
+      className={`block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6 ${
+        errors[col.name] ? "ring-red-500" : ""
+      }`}
+    />
+  )}
+</form.Field>
                         )
                       case "textarea":
                         return (
