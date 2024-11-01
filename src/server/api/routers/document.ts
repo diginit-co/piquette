@@ -25,6 +25,8 @@ export const documentRouter = createTRPCRouter({
     .input(z.object({ 
       name: z.string(),
       description: z.string(),
+      url: z.string().optional(),
+      type: z.string().optional()
     }))
     .mutation(async ({ ctx, input }) => {
 
@@ -54,6 +56,8 @@ export const documentRouter = createTRPCRouter({
         token: nanoid(6),
         name: input.name,
         description: input.description,
+        url: input.url,
+        type: input.type,
         createdBy: userId,
         updatedBy: userId,
         owner: userId

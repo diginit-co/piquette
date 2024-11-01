@@ -23,11 +23,9 @@ export async function UploadFile(fileBuffer: Buffer, mimeType: string, fileName:
     };
   
     try {
-      console.log("Sending file to S3 with params:", params);
       const command = new PutObjectCommand(params);
       await s3.send(command);
   
-      console.log("File upload successful");
       return `https://piquette-app.s3.amazonaws.com/${fileName}`;
     } catch (error) {
       console.error("Error during file upload to S3:", error);

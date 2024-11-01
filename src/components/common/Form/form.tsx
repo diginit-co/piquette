@@ -141,6 +141,7 @@ const handleFieldChange = (name: string, value: string | Updater<string | never[
 
   return (
     <form
+      encType="multipart/form-data"
       onSubmit={(e) => {
         e.preventDefault();
         void form.handleSubmit();
@@ -208,19 +209,19 @@ const handleFieldChange = (name: string, value: string | Updater<string | never[
                           <form.Field name={col.name}>
                             {(field) => (
                               <Input
-                                value={field.state.value}
-                                type="file"
-                                placeholder={col.placeholder ?? ""}
-                                onBlur={(e) =>
-                                  handleFieldChange(col.name, e.target.value)
+                              type="file"
+                              multiple={col.multiple ?? false} // Optional: for multiple file uploads
+                              onChange={(e) => {
+                                const files = e.target.files;
+                                if (files && files.length > 0) {
+                                  field.handleChange(files[0]); // Save the first file's reference
+                                  handleFieldChange(col.name, files[0]); // Save state for display/processing
                                 }
-                                onChange={(e) =>
-                                  field.handleChange(e.target.value)
-                                }
-                                className={`block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6 ${
-                                  errors[col.name] ? "ring-red-500" : ""
-                                }`}
-                              />
+                              }}
+                              className={`block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6 ${
+                                errors[col.name] ? "ring-red-500" : ""
+                              }`}
+                            />
                             )}
                           </form.Field>
                         )

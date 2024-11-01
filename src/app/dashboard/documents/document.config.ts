@@ -37,7 +37,7 @@ const documentForm: FormDefinition = {
       {label: "Description", type: "textarea", name: "description", required: true,}
     ],
     [
-      {label: "File", type: "file", name: "file", required: true,}
+      {label: "File", type: "file", name: "file", required: false, multiple: false}
     ]
     
   ],

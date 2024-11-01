@@ -17,7 +17,7 @@ export function DocumentForm() {
   const [error, setError] = useState<string | null>(null);
 
   // Define the mutation using `useMutation`
-  const createBusinessMutation = api.document.create.useMutation({
+  const createDocumentMutation = api.document.create.useMutation({
     onSuccess: async () => {
       toast({
         variant: "default",
@@ -57,23 +57,45 @@ export function DocumentForm() {
   const handleFormSubmit = async (values: Record<string, unknown>) => {
     setIsLoading(true);
     try {
-      const newDoc = await createBusinessMutation.mutateAsync({
+      let fileUrl = "";
+      let mimeType = "";
+      let fileType = "";
+  
+      if (values.file) {
+        const selectedFile = values.file as File;
+        const formData = new FormData();
+        console.log(selectedFile)
+        formData.append("file", selectedFile);
+  
+        const response = await fetch("/api/aws", {
+          method: "POST",
+          body: formData,
+          headers: {
+            "x-original-filename": selectedFile.name, // Pass the original file name
+            "x-original-type": selectedFile.type, // Pass the original file type
+          },
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          fileUrl = data.fileUrl;
+          mimeType = data.mimeType;
+          fileType = data.fileType;
+        } else {
+          throw new Error("File upload failed");
+        }
+      }
+  
+      await createDocumentMutation.mutateAsync({
         name: values.name as string,
         description: values.description as string,
+        url: fileUrl,
+        type: fileType
       });
-
-      const selectedFile = values.file as File;
-      const formData = new FormData();
-      formData.append("file", selectedFile);
-
-      const response = await fetch("/api/aws", {
-        method: "POST",
-        body: formData,
-      });
-
+  
       setIsLoading(false);
     } catch (err) {
-      console.error("Error creating business:", err);
+      console.error("Error creating document:", err);
       setError("An error occurred while submitting the form.");
     } finally {
       setIsLoading(false);
