@@ -2,13 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { UploadFile } from "~/server/services/aws/upload";
 import { nanoid } from "nanoid";
-import { fileTypeFromBuffer } from "file-type";
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
 
 export async function POST(req: NextRequest) {
     try {
