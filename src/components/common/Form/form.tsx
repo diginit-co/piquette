@@ -93,7 +93,7 @@ interface AutocompleteResponse {
 // Change the type assertion in the handleAutocomplete function
 const handleAutocomplete = async (fieldName: string, prompt: string) => {
   setIsLoading(true);
-  const formValues = stateValue;
+  const formValues: Record<string, unknown> = stateValue;
 
   try {
     const response = await fetch("/api/openai/autocomplete", {
