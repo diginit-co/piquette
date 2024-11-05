@@ -47,62 +47,52 @@ export function DocumentForm() {
 
   /**
    * Handle Form Submission
-   * 
+   *
    * This function is required and is the primary callback sent to the FormComponent.
    * Pass the formConfig object and it will return a key value pair of the form data.
-   * 
+   *
    * Handle the form data as you see fit.
-   * 
+   *
    */
   const handleFormSubmit = async (values: Record<string, unknown>) => {
     setIsLoading(true);
     try {
-      
       let fileUrl: string | undefined;
-      let fileType: string | undefined;
   
       if (values.file) {
         const selectedFile = values.file as File;
         console.log(`Selected file: ${selectedFile.name}`);
         const formData = new FormData();
         formData.append("file", selectedFile);
-        // for (const [key, value] of formData.entries()) {
-        //   console.log(key, value);
-        // }
   
         const response = await fetch("/api/aws", {
           method: "POST",
           body: formData,
           headers: {
-            "x-original-filename": selectedFile["name"], // Pass the original file name
+            "x-original-filename": selectedFile.name, // Pass the original file name
           },
         });
-  
-    
+
         if (response.ok) {
-          const data = await response.json();
-            fileUrl = data.fileUrl;
-            fileType = data.fileType;
+          const data = await response.json() as { fileUrl: string; fileType: string }; // Type assertion
+          fileUrl = data.fileUrl; // Now safely accessing fileUrl
         } else {
           throw new Error("File upload failed");
         }
 
-  
-      await createDocumentMutation.mutateAsync({
-        name: values.name as string,
-        description: values.description as string,
-        url: fileUrl as string,
-        type: selectedFile["type"] as string
-      });
-  
+        await createDocumentMutation.mutateAsync({
+          name: values.name as string, // Changed from values["name"]
+          description: values.description as string,
+          url: fileUrl!, // Use `!` to assert non-null for fileUrl
+          type: selectedFile.type // Changed from selectedFile["type"] to selectedFile.type
+        });
+      }
+    } catch (err) {
+      console.error("Error creating document:", err);
+      setError("An error occurred while submitting the form.");
+    } finally {
       setIsLoading(false);
-    } 
-  } catch (err) {
-    console.error("Error creating document:", err);
-    setError("An error occurred while submitting the form.");
-  } finally {
-    setIsLoading(false);
-  }
+    }
   };
 
   return (
