@@ -132,8 +132,9 @@ const handleFieldChange = (
     [name]: value,
   }));
 
-  // Handle different value types
-  const isStringOrArray = (val: any): val is string | unknown[] => typeof val === "string" || Array.isArray(val);
+  // Ensure the following function handles a specific value type 
+  const isStringOrArray = (val: unknown): val is string | unknown[] => 
+    typeof val === "string" || Array.isArray(val);
   
   if (isStringOrArray(value)) {
     form.setFieldValue(name, value); // For regular text fields and array inputs
