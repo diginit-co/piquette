@@ -54,6 +54,11 @@ export function DocumentForm() {
    * Handle the form data as you see fit.
    *
    */
+
+  interface FileUploadResponse {
+    fileUrl: string;
+  }
+
   const handleFormSubmit = async (values: Record<string, unknown>) => {
     setIsLoading(true);
     try {
@@ -74,7 +79,7 @@ export function DocumentForm() {
         });
   
         if (response.ok) {
-          const data = await response.json(); // Removed type assertion
+          const data = await response.json() as FileUploadResponse; // Removed type assertion
           fileUrl = data.fileUrl;
         } else {
           throw new Error("File upload failed");
