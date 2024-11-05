@@ -6,8 +6,8 @@ import { api } from "~/trpc/react";
 import moment from "moment";
 import Link from "next/link";
 
+import { FileIcon, FileImageIcon } from "lucide-react";
 import { ActionsComponent } from "~/components/common";
-
 import {
   Card,
   CardHeader,
@@ -16,6 +16,12 @@ import {
   CardContent,
   CardFooter
 } from "~/components/ui/card";
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+ } from "~/components/ui/tooltip";
 import { Skeleton } from "~/components/ui/skeleton";
 
 interface DocumentIndexProps {
@@ -38,33 +44,47 @@ function DocumentContent({ userId }: DocumentIndexProps) {
   // Display the business data
   return (
     <div className="space-y-4">
-      {documents.map((business) => (
+      {documents.map((document) => (
         <div 
           className="flex items-center justify-between border-b border-gray-100 pb-4 space-x-4" 
-          key={business.id}
+          key={document.id}
         >
           <div className="flex-1 min-w-0">
             <p className="font-semibold text-lg text-gray-900">
-              <Link href={`/dashboard/documents/${business.cuid}`}>
-                {business.name}
-              </Link>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    {document.name}
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {document.description}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              
             </p>
             <div className="flex items-center gap-x-2 text-xs text-gray-500 mt-1">
               <p className="whitespace-nowrap">
-                Created: {moment(business.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
-              </p>
-            </div>
+              Created: {moment(document.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
+            </p>
           </div>
-          <div className="flex-none">
+        </div>
+        <div className="flex ">
+          { document.type && document.type.includes("image")
+            ? <FileImageIcon className="h-6 w-6" />
+            : <FileIcon className="h-6 w-6" />
+          }
+        </div>
+        <div className="flex-none">
             <ActionsComponent 
-              actions={['pin', 'favorite', 'like', 'dislike']} 
+              actions={['pin', 'favorite', 'like', 'dislike', 'download', 'delete']} 
               data={{
-                model: 'like', 
-                id: business.id, 
-                key: business.cuid, 
-                object: business.cuid, 
+                model: 'document', 
+                id: document.id, 
+                key: document.cuid, 
+                object: document.cuid, 
                 type: 'document', 
-                label: business.name
+                label: document.name
               }} 
             />
           </div>
@@ -111,7 +131,7 @@ export default function DocumentIndex({ userId }: DocumentIndexProps) {
     >
       <Card>
         <CardHeader>
-          [toolbar]
+          {/* [toolbar] */}
         </CardHeader>
         <CardContent>
           <DocumentContent userId={userId} />

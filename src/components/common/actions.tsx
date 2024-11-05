@@ -98,7 +98,7 @@ import {
 
 // Component props interface
 interface ActionsComponentProps {
-    actions: Array<"save" | "like" | "dislike" | "share" | "hide" | "edit" | "archive" | "favorite" | "remove" | "pin">;
+    actions: Array<"save" | "like" | "dislike" | "share" | "hide" | "edit" | "archive" | "favorite" | "remove" | "pin" | "download" | "delete">;
     data: {
         model: string;
         id: number;
