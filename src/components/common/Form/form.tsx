@@ -222,18 +222,9 @@ const handleFieldChange = (
                               <Input
                                 type="file"
                                 multiple={false} // Optional: for multiple file uploads
-                                onChange={(e) => {
-                                  const files = e.target.files;
-                                  if (files && files.length > 0) {
-                                    const files = e.target.files;
-                                    if (files && files.length > 0) {
-                                      const selectedFile = files[0];
-                                      if (selectedFile) {
-                                        handleFieldChange(col.name, selectedFile); // Update state and form with the file
-                                        field.handleChange(selectedFile); // Change this line to use the file object properly
-                                      }
-                                    }
-                                  }
+                                onChange={e => {
+                                  const file = e.target.files ? e.target.files[0] : undefined;
+                                  handleFieldChange('file', file);
                                 }}
                                 className={`block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6 ${
                                   errors[col.name] ? "ring-red-500" : ""
