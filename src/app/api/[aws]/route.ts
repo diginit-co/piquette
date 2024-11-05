@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
         const fileBuffer = Buffer.from(await fileBlob.arrayBuffer());
 
         // Detect file type and extension
-        const originalName  = req.headers.get("x-original-filename") || "uploaded-file";
+        const originalName  = req.headers.get("x-original-filename") ?? "uploaded-file";
         
         // Fetch and print the headers to console
         const headers = Object.fromEntries(req.headers.entries());
