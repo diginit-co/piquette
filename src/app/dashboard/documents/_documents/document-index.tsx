@@ -70,7 +70,7 @@ function DocumentContent({ userId }: DocumentIndexProps) {
           </div>
         </div>
         <div className="flex ">
-          { document.type && document.type.includes("image")
+          { document.type?.includes("image")
             ? <FileImageIcon className="h-6 w-6" />
             : <FileIcon className="h-6 w-6" />
           }
