@@ -69,22 +69,22 @@ export function DocumentForm() {
           method: "POST",
           body: formData,
           headers: {
-            "x-original-filename": selectedFile.name, // Pass the original file name
+            "x-original-filename": selectedFile.name,
           },
         });
-
+  
         if (response.ok) {
-          const data = await response.json() as { fileUrl: string; fileType: string }; // Type assertion
-          fileUrl = data.fileUrl; // Now safely accessing fileUrl
+          const data = await response.json(); // Removed type assertion
+          fileUrl = data.fileUrl;
         } else {
           throw new Error("File upload failed");
         }
-
+  
         await createDocumentMutation.mutateAsync({
-          name: values.name as string, // Changed from values["name"]
+          name: values.name as string,
           description: values.description as string,
-          url: fileUrl!, // Use `!` to assert non-null for fileUrl
-          type: selectedFile.type // Changed from selectedFile["type"] to selectedFile.type
+          url: fileUrl, // Removed non-null assertion
+          type: selectedFile.type,
         });
       }
     } catch (err) {
