@@ -57,49 +57,52 @@ export function DocumentForm() {
   const handleFormSubmit = async (values: Record<string, unknown>) => {
     setIsLoading(true);
     try {
-      let fileUrl = "";
-      let mimeType = "";
-      let fileType = "";
+      
+      let fileUrl: string | undefined;
+      let fileType: string | undefined;
   
       if (values.file) {
         const selectedFile = values.file as File;
+        console.log(`Selected file: ${selectedFile.name}`);
         const formData = new FormData();
-        console.log(selectedFile)
         formData.append("file", selectedFile);
+        // for (const [key, value] of formData.entries()) {
+        //   console.log(key, value);
+        // }
   
         const response = await fetch("/api/aws", {
           method: "POST",
           body: formData,
           headers: {
-            "x-original-filename": selectedFile.name, // Pass the original file name
-            "x-original-type": selectedFile.type, // Pass the original file type
+            "x-original-filename": selectedFile["name"], // Pass the original file name
           },
         });
   
+    
         if (response.ok) {
           const data = await response.json();
-          fileUrl = data.fileUrl;
-          mimeType = data.mimeType;
-          fileType = data.fileType;
+            fileUrl = data.fileUrl;
+            fileType = data.fileType;
         } else {
           throw new Error("File upload failed");
         }
-      }
+
   
       await createDocumentMutation.mutateAsync({
         name: values.name as string,
         description: values.description as string,
-        url: fileUrl,
-        type: fileType
+        url: fileUrl as string,
+        type: selectedFile["type"] as string
       });
   
       setIsLoading(false);
-    } catch (err) {
-      console.error("Error creating document:", err);
-      setError("An error occurred while submitting the form.");
-    } finally {
-      setIsLoading(false);
-    }
+    } 
+  } catch (err) {
+    console.error("Error creating document:", err);
+    setError("An error occurred while submitting the form.");
+  } finally {
+    setIsLoading(false);
+  }
   };
 
   return (

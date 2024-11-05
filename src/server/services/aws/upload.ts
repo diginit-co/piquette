@@ -11,14 +11,13 @@ const s3 = new S3Client({
     },    
 });
 
-export async function UploadFile(fileBuffer: Buffer, mimeType: string, fileName: string) {
+export async function UploadFile(fileBuffer: Buffer, fileName: string) {
     console.log("Starting file upload to S3");
   
     const params = {
       Bucket: env.AWS_S3_BUCKET!,
       Key: fileName,
       Body: fileBuffer,
-      ContentType: mimeType,
     };
   
     try {
