@@ -6,14 +6,16 @@ export default interface FormDefinition {
 }
 
 export interface Field {
+    multiple: boolean
     label: string
-    type: "text" | "email" | "tel" | "textarea" | "select" | "radio" | "checkbox" | "switch"
+    type: "text" | "email" | "tel" | "textarea" | "select" | "radio" | "checkbox" | "switch" | "file"
     name: string
     placeholder?: string
     description?: string
     required: boolean
     options?: Option[]
     autocomplete?: Autocomplete
+    multiple?: boolean
 }
 
 

@@ -3,7 +3,7 @@ import { type Metadata } from "next";
 
 import { HeaderComponent } from '~/components/common';
 import Column from '~/components/templates/column';
-import { BusinessIndex } from './_components';
+import { BusinessIndex } from './_businesses';
 
 export const metadata: Metadata = {
   title: `Business | Piquette`,

@@ -93,7 +93,7 @@ interface AutocompleteResponse {
 // Change the type assertion in the handleAutocomplete function
 const handleAutocomplete = async (fieldName: string, prompt: string) => {
   setIsLoading(true);
-  const formValues = stateValue;
+  const formValues: Record<string, unknown> = stateValue;
 
   try {
     const response = await fetch("/api/openai/autocomplete", {
@@ -120,15 +120,27 @@ const handleAutocomplete = async (fieldName: string, prompt: string) => {
 };
 
 // Update the handleFieldChange function signature
-const handleFieldChange = (name: string, value: string | Updater<string | never[]>) => {
-  // Update the state with the new value
+const handleFieldChange = (
+  name: string, 
+  value: string | File | Updater<string | never[]> | undefined
+) => {
+  if (value === undefined) return; // Guard clause for undefined value
+
+  // Update state with the new value
   setStateValue((prev) => ({
     ...prev,
     [name]: value,
   }));
 
-  // Update the form field with the new value
-  form.setFieldValue(name, value);
+  // Ensure the following function handles a specific value type 
+  const isStringOrArray = (val: unknown): val is string | unknown[] => 
+    typeof val === "string" || Array.isArray(val);
+  
+  if (isStringOrArray(value)) {
+    form.setFieldValue(name, value); // For regular text fields and array inputs
+  } else if (value instanceof File) {
+    form.setFieldValue(name, value as unknown as string); // For file inputs
+  }
 
   // Clear error if value is provided
   if (errors[name] && value !== "") {
@@ -141,6 +153,7 @@ const handleFieldChange = (name: string, value: string | Updater<string | never[
 
   return (
     <form
+      encType="multipart/form-data"
       onSubmit={(e) => {
         e.preventDefault();
         void form.handleSubmit();
@@ -203,6 +216,24 @@ const handleFieldChange = (name: string, value: string | Updater<string | never[
                             )}
                           </form.Field>
                         );
+                      case "file":
+                        return (
+                          <form.Field name={col.name}>
+                            {(field) => (
+                              <Input
+                                type="file"
+                                multiple={false} // Optional: for multiple file uploads
+                                onChange={e => {
+                                  const file = e.target.files ? e.target.files[0] : undefined;
+                                  handleFieldChange('file', file);
+                                }}
+                                className={`block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6 ${
+                                  errors[col.name] ? "ring-red-500" : ""
+                                }`}
+                              />
+                            )}
+                          </form.Field>
+                        )
                       case "textarea":
                         return (
                           <div className="space-y-5">
