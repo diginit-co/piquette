@@ -19,6 +19,7 @@ export default function DashboardPage() {
       </Head>
       <h1>Home</h1>
       {user && <p>Welcome, {user.firstName}!</p>}
+      
       {myProfile && (
         <div>
           <p>Profile ID: {myProfile.id}</p>

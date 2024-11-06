@@ -39,10 +39,10 @@ export default clerkMiddleware(async (auth, req) => {
 
       if (createResponse.ok) {
         const newProfileData = await createResponse.json();
-        profileCUID = newProfileData.cuid; // Use the new profile's cuid
+        profileCUID = `profile_${newProfileData.cuid}`; // Use the new profile's cuid
         // Set the profile cookie with the new cuid
         const response = NextResponse.next();
-        response.cookies.set('profile', profileCUID, { path: '/', httpOnly: false });
+        response.cookies.set('__piquette', profileCUID, { path: '/', httpOnly: false });
         return response;
       } else {
         console.error('Failed to create profile');
@@ -55,7 +55,7 @@ export default clerkMiddleware(async (auth, req) => {
   // Set the profile cookie if cuid is available
   if (profileCUID) {
     const response = NextResponse.next();
-    response.cookies.set('profile', profileCUID, { path: '/', httpOnly: true });
+    response.cookies.set('__piquette', `profile_${profileCUID}`, { path: '/', httpOnly: false });
     return response;
   }
 
