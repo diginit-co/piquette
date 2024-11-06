@@ -6,8 +6,11 @@ import { archiveRouter } from "./routers/services/archive";
 import { pinRouter } from "./routers/services/pin";
 import { restRouter } from "~/server/api/routers/services/rest";
 
-import { documentRouter } from "./routers/document";
 import { businessRouter } from "~/server/api/routers/business";
+import { documentRouter } from "./routers/document";
+import { profileRouter } from "./routers/profile";
+
+
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
 /**
@@ -25,9 +28,11 @@ export const appRouter = createTRPCRouter({
   archive: archiveRouter,
   save: saveRouter,
   pin: pinRouter,
+  
   //model routers
-  document: documentRouter,
   business: businessRouter,
+  document: documentRouter,
+  profile: profileRouter,
 });
 
 // export type definition of API

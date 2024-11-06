@@ -1,6 +1,7 @@
 'use client'
 import React from "react";
 import { useState } from 'react'
+import ProfileProvider from "~/context/profile-context";
 import { piquetteConfig } from "~/config";
 import { useUser} from "@clerk/nextjs";
 import { cn } from "~/lib/utils";
@@ -29,7 +30,7 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const pathname = usePathname(); // Get the current path
   return (
-    <>
+    <ProfileProvider>
       {/*
         This example requires updating your template:
 
@@ -292,6 +293,6 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
           </main>
         </div>
       </div>
-    </>
+    </ProfileProvider>
   )
 }
