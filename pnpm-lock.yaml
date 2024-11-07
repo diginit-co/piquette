@@ -101,6 +101,9 @@ dependencies:
   clsx:
     specifier: ^2.1.1
     version: 2.1.1
+  cookies-next:
+    specifier: ^4.3.0
+    version: 4.3.0
   dlx:
     specifier: ^0.2.1
     version: 0.2.1
@@ -4831,6 +4834,13 @@ packages:
   /cookie@0.7.0:
     resolution: {integrity: sha512-qCf+V4dtlNhSRXGAZatc1TasyFO6GjohcOul807YOb5ik3+kQSnb4d7iajeCL8QHaJ4uZEjCgiCJerKXwdRVlQ==}
     engines: {node: '>= 0.6'}
+    dev: false
+
+  /cookies-next@4.3.0:
+    resolution: {integrity: sha512-XxeCwLR30cWwRd94sa9X5lRCDLVujtx73tv+N0doQCFIDl83fuuYdxbu/WQUt9aSV7EJx7bkMvJldjvzuFqr4w==}
+    dependencies:
+      '@types/cookie': 0.6.0
+      cookie: 0.7.0
     dev: false
 
   /copy-anything@3.0.5:

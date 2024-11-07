@@ -46,6 +46,7 @@
     "add": "^2.0.6",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "cookies-next": "^4.3.0",
     "dlx": "^0.2.1",
     "drizzle-orm": "^0.33.0",
     "file-type": "^19.6.0",

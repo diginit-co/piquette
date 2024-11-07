@@ -23,6 +23,7 @@ export const documentRouter = createTRPCRouter({
    */
   create: publicProcedure
     .input(z.object({ 
+      owner: z.number(),
       name: z.string(),
       description: z.string(),
       url: z.string().optional(),
@@ -52,6 +53,7 @@ export const documentRouter = createTRPCRouter({
       }
 
       await ctx.db.insert(documents).values({
+        owner: input.owner,
         cuid: createId(),
         token: nanoid(6),
         name: input.name,
@@ -60,7 +62,7 @@ export const documentRouter = createTRPCRouter({
         type: input.type,
         createdBy: userId,
         updatedBy: userId,
-        owner: userId
+        
       });
     }),
 

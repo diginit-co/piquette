@@ -2,19 +2,22 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation"; // Import useRouter
+import { api } from "~/trpc/react";
+import { useProfileContext } from "~/context/profile-context";
 import { toast } from "~/hooks/use-toast";
 
 import { documentConfig } from "../document.config";
 import { FormComponent } from "~/components/common";
 
-import { api } from "~/trpc/react";
-import { unknown } from "zod";
+
+
 
 export function DocumentForm() {
   const router = useRouter(); // Initialize useRouter
   const utils = api.useUtils();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { myProfile } = useProfileContext();
 
   // Define the mutation using `useMutation`
   const createDocumentMutation = api.document.create.useMutation({
@@ -85,7 +88,12 @@ export function DocumentForm() {
           throw new Error("File upload failed");
         }
   
+        if (!myProfile?.id) {
+          throw new Error("Profile not found");
+        }
+
         await createDocumentMutation.mutateAsync({
+          owner: myProfile.id,
           name: values.name as string,
           description: values.description as string,
           url: fileUrl, // Removed non-null assertion
