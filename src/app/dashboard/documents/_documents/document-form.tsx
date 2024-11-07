@@ -88,8 +88,12 @@ export function DocumentForm() {
           throw new Error("File upload failed");
         }
   
+        if (!myProfile?.id) {
+          throw new Error("Profile not found");
+        }
+
         await createDocumentMutation.mutateAsync({
-          owner: myProfile ? myProfile.id as number : 0,
+          owner: myProfile.id,
           name: values.name as string,
           description: values.description as string,
           url: fileUrl, // Removed non-null assertion

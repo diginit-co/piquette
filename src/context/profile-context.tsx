@@ -2,15 +2,15 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-interface Profile {
+export interface ProfileInterface {
   id: number | null;
   cuid: string;
   type: string;
 }
 
 interface ProfileContextType {
-  myProfile: Profile;
-  setMyProfile: React.Dispatch<React.SetStateAction<Profile>>;
+  myProfile: ProfileInterface;
+  setMyProfile: React.Dispatch<React.SetStateAction<ProfileInterface>>;
 }
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
@@ -24,7 +24,7 @@ export const useProfileContext = () => {
 };
 
 export default function ProfileProvider({ children }: { children: ReactNode }) {
-  const [myProfile, setMyProfile] = useState<Profile>({ id: null, cuid: '', type: '' });
+  const [myProfile, setMyProfile] = useState<ProfileInterface>({ id: null, cuid: '', type: '' });
   
   useEffect(() => {
     const fetchProfile = async () => {
@@ -42,20 +42,21 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
             }
           });
           if (response.ok) {
-            const data = await response.json() as Profile;
+            const data = await response.json() as ProfileInterface;
             setMyProfile({ id: data.id, cuid: data.cuid, type: data.type });
           } else {
             setMyProfile({ id: 0, cuid: 'data.cuid', type: 'data.type' });
           }
-        } catch (error) {
+        } catch {
           setMyProfile({ id: 1, cuid: 'data.cuid', type: 'data.type' });
         }
       } else {
         setMyProfile({ id: 2, cuid: 'data.cuid', type: 'data.type' });
       }
     };
-
-    fetchProfile();
+  
+    void fetchProfile(); // Explicitly mark as ignored promise to satisfy TypeScript
+  
   }, []);
 
   return (

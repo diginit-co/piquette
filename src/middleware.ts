@@ -9,24 +9,23 @@ export default clerkMiddleware(async (auth, req) => {
 
   if (!userId) {
     // console.log("No authenticated user detected");
-  return NextResponse.next();
-}
+    return NextResponse.next();
+  }
 
-let profileCUID; // Variable to store profile cuid
+  let profileCUID: string | undefined; // Variable to store profile cuid
 
-if (!req.cookies.has('__piquette')) {
-  try {
-    // if there is no cookie then attemt to fetch the profile with userId passed as a header
-    const profileResponse = await fetch(`${req.nextUrl.origin}/api/profile`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
+  if (!req.cookies.has('__piquette')) {
+    try {
+      const profileResponse = await fetch(`${req.nextUrl.origin}/api/profile`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
           'x-user-cuid': userId,
         },
       });
 
       if (profileResponse.ok) {
-        const profileData = await profileResponse.json();
+        const profileData = await profileResponse.json() as { cuid: string };
         profileCUID = profileData.cuid;
       } else {
         const createResponse = await fetch(`${req.nextUrl.origin}/api/profile`, {
@@ -38,7 +37,7 @@ if (!req.cookies.has('__piquette')) {
         });
 
         if (createResponse.ok) {
-          const newProfileData = await createResponse.json();
+          const newProfileData = await createResponse.json() as { cuid: string };
           profileCUID = `profile_${newProfileData.cuid}`;
           const response = NextResponse.next();
           response.cookies.set('__piquette', profileCUID, { path: '/', httpOnly: false });
@@ -58,7 +57,6 @@ if (!req.cookies.has('__piquette')) {
     }
   }
 
-  // Continue with the original middleware logic
   if (isProtectedRoute(req)) authObj.protect();
   return NextResponse.next();
 });

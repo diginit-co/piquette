@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   
 
   // handle getByCUID
-  if (!userId && profileCUID && profileCUID.startsWith('profile_')) {
+  if (!userId && profileCUID?.startsWith('profile_')) {
     // strip _profile_ from the cuid
     const profileToken = profileCUID.replace('profile_', '');
 
@@ -67,7 +67,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const { userId } = await req.json();
+  const { userId }: { userId: string } = await req.json() as { userId: string };
 
   if (!userId) {
     return new Response(JSON.stringify({ message: 'UserId is required' }), {
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
   console.log(`UserId: ${userId}`);
 
   try {
-    const newProfile = await api.profile.create({ user: userId });
+    const newProfile = await api.profile.create({ user: userId } as { user: string });
     return new Response(JSON.stringify({ cuid: newProfile.cuid }), {
       status: 201,
       headers: { 'Content-Type': 'application/json' },
