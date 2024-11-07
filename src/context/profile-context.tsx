@@ -32,16 +32,17 @@ export default function ProfileProvider({ children }: { children: ReactNode }) {
         .split('; ')
         .find((row) => row.trim().startsWith('__piquette='))
         ?.split('=')[1];
-
+  
       if (profileToken) {
         try {
           const response = await fetch('/api/profile', {
             headers: {
-              'Authorization': `Bearer ${profileToken}`
+              'Content-Type': 'application/json',
+              'x-profile-cuid': profileToken
             }
           });
           if (response.ok) {
-            const data = await response.json();
+            const data = await response.json() as Profile;
             setMyProfile({ id: data.id, cuid: data.cuid, type: data.type });
           } else {
             setMyProfile({ id: 0, cuid: 'data.cuid', type: 'data.type' });

@@ -77,4 +77,42 @@ export const profileRouter = createTRPCRouter({
 
       return profileDetails ?? null;
     }),
+
+    /**
+     * GetByCUID
+     * This function is used to retrieve a profile by its CUID.
+     * It takes a string input parameter 'profile' which is the CUID of the profile to be retrieved.
+     * The function retrieves the profile details from the database using the CUID.
+     * If the profile is found, it returns the profile details as an object.
+     * If the profile is not found, it returns null.
+     */
+    getByCUID: publicProcedure
+    
+    .input(z.object({ profile: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const authToken = ctx.headers.get('x-profile-id') as string | undefined;
+    
+
+    //   if (!authToken) {
+    //     throw new Error("Unauthorized: Missing auth token");
+    //   }
+
+    //   let userId: string | null = null;
+    //   try {
+    //     const decodedToken = jwt.decode(authToken) as { sub: string } | null;
+    //     if (!decodedToken?.sub) {
+    //       throw new Error("Unauthorized: Invalid token");
+    //     }
+    //     userId = decodedToken.sub;
+    //   } catch (error: unknown) {
+    //     throw new Error(`Unauthorized: Error decoding token - ${(error as Error).message}`);
+    //   }
+
+      // Retrieve the profile details for the specified user
+      const profileDetails = await ctx.db.query.profiles.findFirst({
+        where: eq(profiles.cuid, input.profile),
+      });
+
+      return profileDetails ?? null;
+    }),
 });
