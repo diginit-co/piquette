@@ -25,7 +25,7 @@ export function DocumentForm() {
       toast({
         variant: "default",
         title: "Document Created",
-        description: "Your business has been created successfully!",
+        description: "Your document has been created successfully!",
       });
 
       // Invalidate queries or perform other actions on success
@@ -36,7 +36,9 @@ export function DocumentForm() {
       }
 
       // Redirect to the businesses dashboard
-      router.push("/dashboard/documents");
+      setTimeout(() => {
+        router.push("/dashboard/documents");
+      }, 1000);
     },
     onError: (err) => {
       toast({

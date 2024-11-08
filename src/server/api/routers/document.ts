@@ -107,43 +107,44 @@ export const documentRouter = createTRPCRouter({
     }),
 
     /**
-     * GetByOwner
+     * getByOwner
+     * getByOwner returns a list of documents associated with a specific owner.
+     * The function takes an input parameter 'owner' which is the ID of the profile that 'owns' the documents.
      */
     getByOwner: publicProcedure
-        .input(z.object({
-        owner: z.string().min(1)
-        }))
+      .input(z.object({ owner: z.number() }))
+      .query(async ({ ctx, input }) => {
 
+      // Get the token from the headers
+      const authToken = ctx.headers.get('x-clerk-auth-token') as string | undefined;
 
-    .query(async ({ ctx, input }) => {
+      if (!authToken) {
+          throw new Error("Unauthorized: Missing auth token");
+      }
 
-    // Get the token from the headers
-    const authToken = ctx.headers.get('x-clerk-auth-token') as string | undefined;
+      // Decode the token to get the `sub` (userId)
+      let userId: string | null = null;
+      try {
+          const decodedToken = jwt.decode(authToken) as { sub: string } | null;
 
-    if (!authToken) {
-        throw new Error("Unauthorized: Missing auth token");
-    }
+          if (!decodedToken?.sub) {
+          throw new Error("Unauthorized: Invalid token");
+          }
 
-    // Decode the token to get the `sub` (userId)
-    let userId: string | null = null;
-    try {
-        const decodedToken = jwt.decode(authToken) as { sub: string } | null;
+          userId = decodedToken.sub;  
+      } catch (error: unknown) {
+          throw new Error(`Unauthorized: Error decoding token - ${(error as Error).message}`);
+      }
 
-        if (!decodedToken?.sub) {
-        throw new Error("Unauthorized: Invalid token");
-        }
+      if (!input.owner) {
+        throw new Error("Owner is required");
+      }
 
-        userId = decodedToken.sub;  
-    } catch (error: unknown) {
-        throw new Error(`Unauthorized: Error decoding token - ${(error as Error).message}`);
-    }
+      const documentsList = await ctx.db.query.documents.findMany({
+        where: input.owner ? eq(documents.owner, input.owner) : undefined,
+      });
 
-    const documentsList = await ctx.db.select()
-        .from(documents)
-        .where(eq(documents.createdBy, input.owner))  // Corrected where clause
-        .orderBy(documents.createdAt, desc(documents.createdAt))
-
-    return documentsList ?? [];
+      return documentsList ?? null;
     }),
 
     /**
