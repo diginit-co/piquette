@@ -28,7 +28,7 @@ export default async function BusinessesPage() {
           {label: "New Document", type: "link", href: "/dashboard/documents/new"},
         ]}
       />
-      <DocumentIndex userId={user.id} />
+      <DocumentIndex />
     
     </Column>  
   )

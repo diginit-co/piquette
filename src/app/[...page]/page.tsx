@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import { Button } from "~/components/ui/button";
 import { notFound } from 'next/navigation';
 
-// Define Button and common Action type
+// Define Action and Button interfaces
 interface Action {
   type: "link" | "dialog";
   href: string;
@@ -16,11 +16,11 @@ interface Button {
   action: Action;
 }
 
-// Base structure for a Section, common for all types
+// Base structure for sections, with shared fields
 interface BaseSection {
   headline?: string;
   description?: string;
-  body?: string; // For markdown content
+  body?: string;
   buttons?: Button[];
 }
 
@@ -34,17 +34,7 @@ interface ColumnsSection extends BaseSection {
   columns: BaseSection[];
 }
 
-// Other types like 'grid' and 'hero' can be added similarly
-interface GridSection extends BaseSection {
-  type: "grid";
-}
-
-interface HeroSection extends BaseSection {
-  type: "hero";
-}
-
-// Union of all section types
-type Section = ContentSection | ColumnsSection | GridSection | HeroSection;
+type Section = ContentSection | ColumnsSection;
 
 // Page Interface
 interface Page {
@@ -54,14 +44,7 @@ interface Page {
   sections: Section[];
 }
 
-// Props for the DefaultPage component
-interface DefaultPageProps {
-  params: {
-    page?: string[];
-  };
-}
-
-// Example CMS data
+// CMS Data for Static Page Content
 const cmsData: Page[] = [
   {
     page: 'home',
@@ -73,19 +56,6 @@ const cmsData: Page[] = [
         headline: 'Build Tomorrow’s Ideas Today',
         description:
           'Piquette is a low-code development factory that accelerates the creation of high-quality applications for entrepreneurs and developers alike.',
-        // body: `
-        //   Lorem ipsum dolor sit amet, consectetur adipiscing elit.  
-        //   Vivamus lacinia odio vitae vestibulum vestibulum.  
-        //   Cras venenatis euismod malesuada.  
-
-        //   Lorem ipsum dolor sit amet, consectetur adipiscing elit.  
-        //   Vivamus lacinia odio vitae vestibulum vestibulum.  
-        //   Cras venenatis euismod malesuada.  
-
-        //   1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.  
-        //   2. Vivamus lacinia odio vitae vestibulum vestibulum.  
-        //   3. Cras venenatis euismod malesuada.
-        // `,
         buttons: [
           {
             label: 'Get Started',
@@ -105,30 +75,9 @@ const cmsData: Page[] = [
           },
         ],
       },
-      // {
-      //   type: 'columns',
-      //   columns: [
-      //     {
-      //       headline: 'Column 1',
-      //       description: 'Description for column 1',
-      //       buttons: [],
-      //     },
-      //     {
-      //       headline: 'Column 2',
-      //       description: 'Description for column 2',
-      //       buttons: [],
-      //     },
-      //     {
-      //       headline: 'Column 3',
-      //       description: 'Description for column 2',
-      //       buttons: [],
-      //     },
-      //   ],
-      // },
     ],
   },
 ];
-
 
 export const metadata: Metadata = {
   title: `Piquette`,
@@ -137,12 +86,17 @@ export const metadata: Metadata = {
 };
 
 // DefaultPage Component
-export default function DefaultPage({ params }: DefaultPageProps) {
-  const slug = params.page ? params.page.join('/') : 'home';
+export default async function DefaultPage({
+  params,
+}: {
+  params: Promise<{ page?: string[] }> ;
+}) {
+  // Ensure `params.page` exists or fallback to 'home'
+  const resolvedParams = await params;
+  const slug = resolvedParams.page ? resolvedParams.page.join('/') : 'home';
   const page = cmsData.find((page) => page.page === slug);
 
-  
-
+  // If no page found, return a 404
   if (!page) return notFound();
 
   return (
@@ -154,7 +108,7 @@ export default function DefaultPage({ params }: DefaultPageProps) {
           case 'columns':
             return <ColumnsSectionComponent key={idx} columns={section.columns} />;
           default:
-            return <div key={idx}><strong>Unknown Component: {section.type}</strong></div>;
+            return false;
         }
       })}
     </section>

@@ -151,7 +151,7 @@ export const businessRouter = createTRPCRouter({
      */
     getByCUID: publicProcedure
       .input(z.object({
-        cuid: z.string().min(1)
+        cuid: z.string().optional()
       }))
 
       .query(async ({ ctx, input }) => {
@@ -177,6 +177,10 @@ export const businessRouter = createTRPCRouter({
               throw new Error(`Unauthorized: Error decoding token - ${(error as Error).message}`);
           }
 
+          if (!input.cuid) {
+              throw new Error("CUID is required");
+          }
+          
           const businessesDetail = await ctx.db.query.businesses.findFirst({  // Changed findOne to findFirst
               where: eq(businesses.cuid, input.cuid),  // Fixed the syntax for 'where'
               
