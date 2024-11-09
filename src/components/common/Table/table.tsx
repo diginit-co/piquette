@@ -36,7 +36,7 @@ interface TableComponentProps {
 }
 
 const columnConfig = {
-  bulkActions: true,
+  bulkActions: false,
   columns: [
     { label: "Name", accessorKey: "name", sort: true },
     { label: "Type", accessorKey: "type", sort: true },
@@ -65,7 +65,7 @@ export default function TableComponent({ data }: TableComponentProps) {
       cell: ({ row }) => {
         const value = row.getValue(col.accessorKey);
         if (col.accessorKey === "createdAt" && value instanceof Date) {
-          return <div>{(value as Date).toLocaleDateString()}</div>;
+          return <div>{value.toLocaleDateString()}</div>;
         }
         return <div>{value?.toString()}</div>;
       },
