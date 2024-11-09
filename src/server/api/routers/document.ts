@@ -112,38 +112,44 @@ export const documentRouter = createTRPCRouter({
      * The function takes an input parameter 'owner' which is the ID of the profile that 'owns' the documents.
      */
     getByOwner: publicProcedure
-      .input(z.object({ owner: z.number() }))
-      .query(async ({ ctx, input }) => {
-
+    .input(z.object({ owner: z.number().min(1).optional() }))
+    .query(async ({ ctx, input }) => {
       // Get the token from the headers
       const authToken = ctx.headers.get('x-clerk-auth-token') as string | undefined;
-
+  
       if (!authToken) {
-          throw new Error("Unauthorized: Missing auth token");
+        throw new Error("Unauthorized: Missing auth token");
       }
-
+  
       // Decode the token to get the `sub` (userId)
       let userId: string | null = null;
       try {
-          const decodedToken = jwt.decode(authToken) as { sub: string } | null;
-
-          if (!decodedToken?.sub) {
+        const decodedToken = jwt.decode(authToken) as { sub: string } | null;
+  
+        if (!decodedToken?.sub) {
           throw new Error("Unauthorized: Invalid token");
-          }
-
-          userId = decodedToken.sub;  
+        }
+  
+        userId = decodedToken.sub;  
       } catch (error: unknown) {
-          throw new Error(`Unauthorized: Error decoding token - ${(error as Error).message}`);
+        throw new Error(`Unauthorized: Error decoding token - ${(error as Error).message}`);
       }
-
+  
       if (!input.owner) {
         throw new Error("Owner is required");
       }
-
+      
       const documentsList = await ctx.db.query.documents.findMany({
         where: input.owner ? eq(documents.owner, input.owner) : undefined,
+        columns: {
+          id: true,
+          cuid: true,
+          name: true,
+          createdAt: true,
+        },
+        orderBy: (documents, { desc }) => [desc(documents.createdAt)],
       });
-
+  
       return documentsList ?? null;
     }),
 

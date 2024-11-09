@@ -3,7 +3,7 @@
 import { useUser } from "@clerk/nextjs";
 import { useProfileContext } from "~/context/profile-context";
 import { api } from "~/trpc/react";
-import { AlertComponent } from "~/components/common";
+import { AlertComponent, TableComponent } from "~/components/common";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useEffect, useState, useMemo } from "react";
 
@@ -31,14 +31,26 @@ export default function DocumentIndex() {
     }
   }, [isUserLoaded, isProfileLoaded, isLoadingDocuments]);
 
+  
   // Render loading state until fully initialized
   if (!isInitialized) return <Skeleton />;
+
+  
+
+  const actions = [
+    { label: "Pin", type: "link", path: "/dashboard/documents/:cuid/pin" },
+    { label: "Favorite", type: "link", path: "/dashboard/documents/:cuid/favorite" },
+    { label: "Like", type: "link", path: "/dashboard/documents/:cuid/like" },
+    { label: "Dislike", type: "link", path: "/dashboard/documents/:cuid/dislike" },
+    { label: "Download", type: "link", path: "/dashboard/documents/:cuid/download" },
+    { label: "Delete", type: "link", path: "/dashboard/documents/:cuid/delete" },
+  ]
 
   // Render the appropriate content based on document availability
   return (
     <div>
       {documents && documents.length > 0 ? (
-        <div>{JSON.stringify(documents, null, 2)}</div>
+        <TableComponent data={documents} />
       ) : (
         <AlertComponent type="info" icon={false} title="No Documents" />
       )}
