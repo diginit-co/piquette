@@ -107,43 +107,50 @@ export const documentRouter = createTRPCRouter({
     }),
 
     /**
-     * GetByOwner
+     * getByOwner
+     * getByOwner returns a list of documents associated with a specific owner.
+     * The function takes an input parameter 'owner' which is the ID of the profile that 'owns' the documents.
      */
     getByOwner: publicProcedure
-        .input(z.object({
-        owner: z.string().min(1)
-        }))
-
-
+    .input(z.object({ owner: z.number().min(1).optional() }))
     .query(async ({ ctx, input }) => {
-
-    // Get the token from the headers
-    const authToken = ctx.headers.get('x-clerk-auth-token') as string | undefined;
-
-    if (!authToken) {
+      // Get the token from the headers
+      const authToken = ctx.headers.get('x-clerk-auth-token') as string | undefined;
+  
+      if (!authToken) {
         throw new Error("Unauthorized: Missing auth token");
-    }
-
-    // Decode the token to get the `sub` (userId)
-    let userId: string | null = null;
-    try {
+      }
+  
+      // Decode the token to get the `sub` (userId)
+      let userId: string | null = null;
+      try {
         const decodedToken = jwt.decode(authToken) as { sub: string } | null;
-
+  
         if (!decodedToken?.sub) {
-        throw new Error("Unauthorized: Invalid token");
+          throw new Error("Unauthorized: Invalid token");
         }
-
+  
         userId = decodedToken.sub;  
-    } catch (error: unknown) {
+      } catch (error: unknown) {
         throw new Error(`Unauthorized: Error decoding token - ${(error as Error).message}`);
-    }
-
-    const documentsList = await ctx.db.select()
-        .from(documents)
-        .where(eq(documents.createdBy, input.owner))  // Corrected where clause
-        .orderBy(documents.createdAt, desc(documents.createdAt))
-
-    return documentsList ?? [];
+      }
+  
+      if (!input.owner) {
+        throw new Error("Owner is required");
+      }
+      
+      const documentsList = await ctx.db.query.documents.findMany({
+        where: input.owner ? eq(documents.owner, input.owner) : undefined,
+        columns: {
+          id: true,
+          cuid: true,
+          name: true,
+          createdAt: true,
+        },
+        orderBy: (documents, { desc }) => [desc(documents.createdAt)],
+      });
+  
+      return documentsList ?? null;
     }),
 
     /**

@@ -14,9 +14,7 @@ export const metadata: Metadata = {
 };
 
 interface BusinessPageProps {
-  params: {
-    cuid: string;
-  };
+  params: Promise<{ cuid: string[] }> ;
 }
 
 export default async function BusinessesPage({ params }: BusinessPageProps) {
@@ -24,23 +22,21 @@ export default async function BusinessesPage({ params }: BusinessPageProps) {
 
   if (!user) return <div>This is an authenticated route</div>;
 
-  const { cuid } = params;
+  const { cuid } = await params; // Awaiting the params to resolve the Promise
 
-  if (!cuid) {
+
+  if (!cuid || cuid.length === 0) {
     return notFound(); // Handles cases where no cuid is present in the URL
   }
 
   // Fetch business data by CUID
-  const businessResponse = await api.business.getByCUID({ cuid });
+  const businessResponse = await api.business.getByCUID({ cuid: cuid[0] });
   const business = businessResponse;
 
-  if (!business) {
-    return (
-      <div className="container mx-auto p-4">
-        <p>Business not found</p>
-      </div>
-    );
+  if (!business?.cuid) {
+    return notFound();
   }
+        
 
   return (
     <>
